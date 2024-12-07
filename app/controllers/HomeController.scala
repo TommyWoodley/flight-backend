@@ -15,7 +15,7 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
   def getApiData() = Action { implicit request: Request[AnyContent] =>
     val jsonResponse = Json.obj(
       "status" -> "success",
-      "message" -> "This NOT is a sample API response"
+      "message" -> "This is a sample API response"
     )
     Ok(jsonResponse)
   }
