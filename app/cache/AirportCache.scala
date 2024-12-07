@@ -1,16 +1,16 @@
 package cache
 
 import model.Airport
-import play.api.libs.json.JsValue
-import services.ApiService
+import play.api.libs.json.Json
 
-class AirportCache(apiService: ApiService) {
-  private val cities = List("LON")
-  private val airports: List[Airport] = cities.flatMap { cityCode =>
-    val json: JsValue = apiService.fetchAirportsForCity(cityCode)
-    (json \ "data").as[List[JsValue]]
-      .filter(airportJson => (airportJson \ "iata_code").asOpt[String].isDefined)
-      .map(_.as[Airport])
+import scala.io.Source
+
+class AirportCache {
+  private val airports: List[Airport] = {
+    val source = Source.fromFile("conf/airports.json")
+    val jsonString = try source.mkString finally source.close()
+    val json = Json.parse(jsonString)
+    json.as[List[Airport]]
   }
 
   def allAirports: List[Airport] = airports
