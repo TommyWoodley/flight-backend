@@ -1,5 +1,6 @@
 package services
 
+import cache.FlightCache
 import model.Trip
 
 class TripCreator(flightCache: FlightCache) {

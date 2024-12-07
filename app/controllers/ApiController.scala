@@ -1,7 +1,9 @@
 package controllers
 
+import cache.FlightCache
 import play.api.libs.json.Json
 import play.api.mvc._
+import services.TripCreator
 
 import javax.inject._
 
@@ -12,11 +14,11 @@ import javax.inject._
 @Singleton
 class ApiController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
+  private val tripCreator = new TripCreator(new FlightCache)
+
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val jsonResponse = Json.obj(
-      "status" -> "success",
-      "message" -> "This is a sample API response"
-    )
+    val trips = tripCreator.create("LHR", "CDG")
+    val jsonResponse = Json.toJson(trips)
     Ok(jsonResponse)
   }
 
