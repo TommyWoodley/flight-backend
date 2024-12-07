@@ -10,7 +10,7 @@ import javax.inject._
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class ApiController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val jsonResponse = Json.obj(

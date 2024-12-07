@@ -2,8 +2,8 @@ package controllers
 
 import org.scalatestplus.play._
 import org.scalatestplus.play.guice._
-import play.api.test._
 import play.api.test.Helpers._
+import play.api.test._
 
 /**
  * Add your spec here.
@@ -11,11 +11,11 @@ import play.api.test.Helpers._
  *
  * For more information, see https://www.playframework.com/documentation/latest/ScalaTestingWithScalaTest
  */
-class HomeControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
+class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
   "HomeController GET" should {
 
     "return JSON data from the new API endpoint" in {
-      val controller = new HomeController(stubControllerComponents())
+      val controller = new ApiController(stubControllerComponents())
       val apiData = controller.getApiData().apply(FakeRequest(GET, "/api/data"))
 
       status(apiData) mustBe OK
