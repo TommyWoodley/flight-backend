@@ -12,7 +12,7 @@ import javax.inject._
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  def getApiData() = Action { implicit request: Request[AnyContent] =>
+  def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val jsonResponse = Json.obj(
       "status" -> "success",
       "message" -> "This is a sample API response"
