@@ -28,5 +28,17 @@
     "iata_code": "LTN",
     "skyId": "LTN",
     "entityId": "95565053"
+  },
+  {
+    "name": "Paris Charles de Gaulle",
+    "iata_code": "CDG",
+    "skyId": "CDG",
+    "entityId": "95565041"
+  },
+  {
+    "name": "Paris Orly",
+    "iata_code": "ORY",
+    "skyId": "ORY",
+    "entityId": "95565040"
   }
 ]
