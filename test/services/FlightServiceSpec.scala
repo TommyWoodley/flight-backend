@@ -34,7 +34,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockApiService.get(endpoint, params)).thenReturn(json)
 
     // Act
-    val result = flightService.getFlights(fromCode, toCode)
+    val result = flightService.getFlights(fromCode, toCode, "2024-12-13")
 
     // Assert
     verify(mockApiService).get(endpoint, params)
@@ -73,7 +73,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockApiService.get(incompleteEndpoint, incompleteParams)).thenReturn(jsonComplete)
 
     // Act
-    val result = flightService.getFlights(fromCode, toCode)
+    val result = flightService.getFlights(fromCode, toCode, "2024-12-13")
 
     // Assert
     verify(mockApiService).get(endpoint, params)

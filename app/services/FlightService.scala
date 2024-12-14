@@ -5,7 +5,7 @@ import play.api.libs.json.JsValue
 import services.FlightService.{RetrieveFlightsEndpoint, RetrieveFlightsIncompleteEndpoint}
 
 class FlightService(apiService: ApiService, airportService: AirportService) {
-  def getFlights(fromCode: String, toCode: String): List[Flight] = {
+  def getFlights(fromCode: String, toCode: String, date: String): List[Flight] = {
     val fromAirport = airportService.getAirport(fromCode)
     val toAirport = airportService.getAirport(toCode)
 
@@ -14,7 +14,7 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
       "destinationSkyId" -> toAirport.map(_._1).getOrElse(""),
       "originEntityId" -> fromAirport.map(_._2).getOrElse(""),
       "destinationEntityId" -> toAirport.map(_._2).getOrElse(""),
-      "date" -> "2024-12-13"
+      "date" -> date
     )
 
     var jsonResponse = apiService.get(RetrieveFlightsEndpoint, params)
