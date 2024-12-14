@@ -1,12 +1,15 @@
 package model
 
 import play.api.libs.functional.syntax.toFunctionalBuilderOps
-import play.api.libs.json.{JsPath, Json, Reads, Writes}
+import play.api.libs.json.{JsPath, Reads, Writes}
 
 case class Airport(code: String, name: String, skyId: String, entity: String)
 
 object Airport {
-  implicit val airportWrites: Writes[Airport] = Json.writes[Airport]
+  implicit val airportWrites: Writes[Airport] = (
+    (JsPath \ "code").write[String] and
+      (JsPath \ "name").write[String]
+    )(airport => (airport.code, airport.name))
 
   implicit val reads: Reads[Airport] = (
     (JsPath \ "iata_code").read[String] and
