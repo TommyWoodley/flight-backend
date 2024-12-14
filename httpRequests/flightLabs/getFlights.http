@@ -1,0 +1,5 @@
+GET https://www.goflightlabs.com/retrieveFlights?access_key={{FLIGHT_LABS_API}}&originSkyId=LGW&destinationSkyId=CDG&
+    originEntityId=95565051&destinationEntityId=95565041&date=2024-12-13
+Accept: application/json
+
+###

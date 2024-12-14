@@ -1,9 +1,8 @@
 package services
 
-import cache.FlightCache
 import model.Trip
 
-class TripCreator(flightCache: FlightCache) {
+class TripCreator(flightCache: FlightService) {
 
   def create(fromCode: String, toCode: String): List[Trip] = {
     val outboundFlights = flightCache.getFlights(fromCode, toCode)

@@ -3,13 +3,14 @@ package cache
 import model.Airport
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.must.Matchers
+import services.AirportService
 
-class AirportCacheSpec extends AnyFlatSpec with Matchers {
+class AirportServiceSpec extends AnyFlatSpec with Matchers {
 
   "Airport Cache" should "fetch and parse airports correctly" in {
 
     // Create an instance of AirportCache with the mocked ApiService
-    val airportCache = new AirportCache()
+    val airportCache = new AirportService()
 
     airportCache.allAirports must contain theSameElementsAs List(
       Airport("LCY", "London City Airport", "LCY", "95565047"),

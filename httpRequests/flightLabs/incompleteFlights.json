@@ -1,0 +1,1459 @@
+{
+  "context": {
+    "status": "incomplete",
+    "sessionId": "Cl0IARJZCk4KJGM2YTE1NWU2LTFlYzMtNDk1Mi1iNGE0LWZjMGQ1Y2Y4MDYxZRACGiRlNzM1NzQwZS0yYjQ1LTRkNGUtYWY2NS1hOTQxNzRlZjI1OTgQh_nLuboyGAESKHVzc19lMjViN2QwZi1mYjJjLTQxODEtYTAzZC00YmYxMzYyOTk5NGU=",
+    "totalResults": 10
+  },
+  "itineraries": [
+    {
+      "id": "13542-2412131350--32356-0-10413-2412131605",
+      "price": {
+        "raw": 149.12,
+        "formatted": "$150",
+        "pricingOptionId": "O6LW7iSRXC6C"
+      },
+      "legs": [
+        {
+          "id": "13542-2412131350--32356-0-10413-2412131605",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 75,
+          "stopCount": 0,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T13:50:00",
+          "arrival": "2024-12-13T16:05:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32356,
+                "alternateId": "EZ",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/EZ.png",
+                "name": "easyJet"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-10413-2412131350-2412131605--32356",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T13:50:00",
+              "arrival": "2024-12-13T16:05:00",
+              "durationInMinutes": 75,
+              "flightNumber": "8405",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "eco": {
+        "ecoContenderDelta": 9.702623
+      },
+      "fareAttributes": [],
+      "tags": [
+        "second_shortest"
+      ],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.999
+    },
+    {
+      "id": "13542-2412131510--32356-0-10413-2412131725",
+      "price": {
+        "raw": 142.74,
+        "formatted": "$143",
+        "pricingOptionId": "8DwTy5Ztvqvy"
+      },
+      "legs": [
+        {
+          "id": "13542-2412131510--32356-0-10413-2412131725",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 75,
+          "stopCount": 0,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T15:10:00",
+          "arrival": "2024-12-13T17:25:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32356,
+                "alternateId": "EZ",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/EZ.png",
+                "name": "easyJet"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-10413-2412131510-2412131725--32356",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T15:10:00",
+              "arrival": "2024-12-13T17:25:00",
+              "durationInMinutes": 75,
+              "flightNumber": "8407",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "tags": [
+        "third_cheapest",
+        "shortest"
+      ],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.747752
+    },
+    {
+      "id": "13542-2412130700--32356-0-10413-2412130920",
+      "price": {
+        "raw": 158.04,
+        "formatted": "$159",
+        "pricingOptionId": "lXn4oakiMIV_"
+      },
+      "legs": [
+        {
+          "id": "13542-2412130700--32356-0-10413-2412130920",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 80,
+          "stopCount": 0,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T07:00:00",
+          "arrival": "2024-12-13T09:20:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32356,
+                "alternateId": "EZ",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/EZ.png",
+                "name": "easyJet"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-10413-2412130700-2412130920--32356",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T07:00:00",
+              "arrival": "2024-12-13T09:20:00",
+              "durationInMinutes": 80,
+              "flightNumber": "8411",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "eco": {
+        "ecoContenderDelta": 6.6932735
+      },
+      "fareAttributes": [],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.561392
+    },
+    {
+      "id": "13542-2412130835--32546-1-10413-2412131300",
+      "price": {
+        "raw": 216.99,
+        "formatted": "$217",
+        "pricingOptionId": "7fS1j19OyUp7"
+      },
+      "legs": [
+        {
+          "id": "13542-2412130835--32546-1-10413-2412131300",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 205,
+          "stopCount": 1,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T08:35:00",
+          "arrival": "2024-12-13T13:00:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32546,
+                "alternateId": "GR",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/GR.png",
+                "name": "Aurigny"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-11740-2412130835-2412130940--32546",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "GCI",
+                "displayCode": "GCI",
+                "parent": {
+                  "flightPlaceId": "GCIA",
+                  "displayCode": "GCI",
+                  "name": "Forest",
+                  "type": "City"
+                },
+                "name": "Guernsey",
+                "type": "Airport",
+                "country": "Guernsey"
+              },
+              "departure": "2024-12-13T08:35:00",
+              "arrival": "2024-12-13T09:40:00",
+              "durationInMinutes": 65,
+              "flightNumber": "601",
+              "marketingCarrier": {
+                "id": -32546,
+                "name": "Aurigny",
+                "alternateId": "GR",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32546,
+                "name": "Aurigny",
+                "alternateId": "GR",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            },
+            {
+              "id": "11740-10413-2412131040-2412131300--32546",
+              "origin": {
+                "flightPlaceId": "GCI",
+                "displayCode": "GCI",
+                "parent": {
+                  "flightPlaceId": "GCIA",
+                  "displayCode": "GCI",
+                  "name": "Forest",
+                  "type": "City"
+                },
+                "name": "Guernsey",
+                "type": "Airport",
+                "country": "Guernsey"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T10:40:00",
+              "arrival": "2024-12-13T13:00:00",
+              "durationInMinutes": 80,
+              "flightNumber": "680",
+              "marketingCarrier": {
+                "id": -32546,
+                "name": "Aurigny",
+                "alternateId": "GR",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32546,
+                "name": "Aurigny",
+                "alternateId": "GR",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.429812
+    },
+    {
+      "id": "13542-2412130840--32356-1-10413-2412131545",
+      "price": {
+        "raw": 143.21,
+        "formatted": "$144",
+        "pricingOptionId": "4wCVceZGlSvI"
+      },
+      "legs": [
+        {
+          "id": "13542-2412130840--32356-1-10413-2412131545",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 365,
+          "stopCount": 1,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T08:40:00",
+          "arrival": "2024-12-13T15:45:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32356,
+                "alternateId": "EZ",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/EZ.png",
+                "name": "easyJet"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-14581-2412130840-2412131145--32356",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "NCE",
+                "displayCode": "NCE",
+                "parent": {
+                  "flightPlaceId": "NICE",
+                  "displayCode": "NCE",
+                  "name": "Nice",
+                  "type": "City"
+                },
+                "name": "Nice",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T08:40:00",
+              "arrival": "2024-12-13T11:45:00",
+              "durationInMinutes": 125,
+              "flightNumber": "8425",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            },
+            {
+              "id": "14581-10413-2412131405-2412131545--32356",
+              "origin": {
+                "flightPlaceId": "NCE",
+                "displayCode": "NCE",
+                "parent": {
+                  "flightPlaceId": "NICE",
+                  "displayCode": "NCE",
+                  "name": "Nice",
+                  "type": "City"
+                },
+                "name": "Nice",
+                "type": "Airport",
+                "country": "France"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T14:05:00",
+              "arrival": "2024-12-13T15:45:00",
+              "durationInMinutes": 100,
+              "flightNumber": "4526",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": true,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "isMashUp": true,
+      "hasFlexibleOptions": false,
+      "score": 0.417879
+    },
+    {
+      "id": "13542-2412131310--31915,-31685-1-10413-2412132005",
+      "price": {
+        "raw": 120.81,
+        "formatted": "$121",
+        "pricingOptionId": "54FMLNRkdz1S"
+      },
+      "legs": [
+        {
+          "id": "13542-2412131310--31915,-31685-1-10413-2412132005",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 355,
+          "stopCount": 1,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T13:10:00",
+          "arrival": "2024-12-13T20:05:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -31915,
+                "alternateId": "FR",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/FR.png",
+                "name": "Ryanair"
+              },
+              {
+                "id": -31685,
+                "alternateId": "07",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/07.png",
+                "name": "Vueling Airlines"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-9409-2412131310-2412131640--31915",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "ALC",
+                "displayCode": "ALC",
+                "parent": {
+                  "flightPlaceId": "ALIC",
+                  "displayCode": "ALC",
+                  "name": "Alicante",
+                  "type": "City"
+                },
+                "name": "Alicante",
+                "type": "Airport",
+                "country": "Spain"
+              },
+              "departure": "2024-12-13T13:10:00",
+              "arrival": "2024-12-13T16:40:00",
+              "durationInMinutes": 150,
+              "flightNumber": "2715",
+              "marketingCarrier": {
+                "id": -31915,
+                "name": "Ryanair",
+                "alternateId": "FR",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -31915,
+                "name": "Ryanair",
+                "alternateId": "FR",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            },
+            {
+              "id": "9409-10413-2412131740-2412132005--31685",
+              "origin": {
+                "flightPlaceId": "ALC",
+                "displayCode": "ALC",
+                "parent": {
+                  "flightPlaceId": "ALIC",
+                  "displayCode": "ALC",
+                  "name": "Alicante",
+                  "type": "City"
+                },
+                "name": "Alicante",
+                "type": "Airport",
+                "country": "Spain"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T17:40:00",
+              "arrival": "2024-12-13T20:05:00",
+              "durationInMinutes": 145,
+              "flightNumber": "8257",
+              "marketingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": true,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "tags": [
+        "cheapest"
+      ],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.393187
+    },
+    {
+      "id": "13542-2412131810--32356-0-10413-2412132030",
+      "price": {
+        "raw": 142.74,
+        "formatted": "$143",
+        "pricingOptionId": "_TP5KEfHBzqz"
+      },
+      "legs": [
+        {
+          "id": "13542-2412131810--32356-0-10413-2412132030",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 80,
+          "stopCount": 0,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T18:10:00",
+          "arrival": "2024-12-13T20:30:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32356,
+                "alternateId": "EZ",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/EZ.png",
+                "name": "easyJet"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-10413-2412131810-2412132030--32356",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T18:10:00",
+              "arrival": "2024-12-13T20:30:00",
+              "durationInMinutes": 80,
+              "flightNumber": "8409",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "eco": {
+        "ecoContenderDelta": 9.702623
+      },
+      "fareAttributes": [],
+      "tags": [
+        "third_shortest"
+      ],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.39312
+    },
+    {
+      "id": "13542-2412131435--31685-1-10413-2412132105",
+      "price": {
+        "raw": 183.54,
+        "formatted": "$184",
+        "pricingOptionId": "IOND7YFB36JC"
+      },
+      "legs": [
+        {
+          "id": "13542-2412131435--31685-1-10413-2412132105",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 330,
+          "stopCount": 1,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T14:35:00",
+          "arrival": "2024-12-13T21:05:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -31685,
+                "alternateId": "07",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/07.png",
+                "name": "Vueling Airlines"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-9772-2412131435-2412131735--31685",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "BCN",
+                "displayCode": "BCN",
+                "parent": {
+                  "flightPlaceId": "BARC",
+                  "displayCode": "BCN",
+                  "name": "Barcelona",
+                  "type": "City"
+                },
+                "name": "Barcelona",
+                "type": "Airport",
+                "country": "Spain"
+              },
+              "departure": "2024-12-13T14:35:00",
+              "arrival": "2024-12-13T17:35:00",
+              "durationInMinutes": 120,
+              "flightNumber": "7827",
+              "marketingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            },
+            {
+              "id": "9772-10413-2412131905-2412132105--31685",
+              "origin": {
+                "flightPlaceId": "BCN",
+                "displayCode": "BCN",
+                "parent": {
+                  "flightPlaceId": "BARC",
+                  "displayCode": "BCN",
+                  "name": "Barcelona",
+                  "type": "City"
+                },
+                "name": "Barcelona",
+                "type": "Airport",
+                "country": "Spain"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T19:05:00",
+              "arrival": "2024-12-13T21:05:00",
+              "durationInMinutes": 120,
+              "flightNumber": "8240",
+              "marketingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": false,
+      "isProtectedSelfTransfer": true,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "isMashUp": false,
+      "hasFlexibleOptions": false,
+      "score": 0.387711
+    },
+    {
+      "id": "13542-2412130840--32356-1-10413-2412131810",
+      "price": {
+        "raw": 132.64,
+        "formatted": "$133",
+        "pricingOptionId": "QSPeD3xAjFtr"
+      },
+      "legs": [
+        {
+          "id": "13542-2412130840--32356-1-10413-2412131810",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 510,
+          "stopCount": 1,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T08:40:00",
+          "arrival": "2024-12-13T18:10:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -32356,
+                "alternateId": "EZ",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/EZ.png",
+                "name": "easyJet"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-14581-2412130840-2412131145--32356",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "NCE",
+                "displayCode": "NCE",
+                "parent": {
+                  "flightPlaceId": "NICE",
+                  "displayCode": "NCE",
+                  "name": "Nice",
+                  "type": "City"
+                },
+                "name": "Nice",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T08:40:00",
+              "arrival": "2024-12-13T11:45:00",
+              "durationInMinutes": 125,
+              "flightNumber": "8425",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            },
+            {
+              "id": "14581-10413-2412131630-2412131810--32356",
+              "origin": {
+                "flightPlaceId": "NCE",
+                "displayCode": "NCE",
+                "parent": {
+                  "flightPlaceId": "NICE",
+                  "displayCode": "NCE",
+                  "name": "Nice",
+                  "type": "City"
+                },
+                "name": "Nice",
+                "type": "Airport",
+                "country": "France"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T16:30:00",
+              "arrival": "2024-12-13T18:10:00",
+              "durationInMinutes": 100,
+              "flightNumber": "4528",
+              "marketingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -32356,
+                "name": "easyJet",
+                "alternateId": "EZ",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": true,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "tags": [
+        "second_cheapest"
+      ],
+      "isMashUp": true,
+      "hasFlexibleOptions": false,
+      "score": 0.381869
+    },
+    {
+      "id": "13542-2412131355--31685-1-10413-2412132105",
+      "price": {
+        "raw": 184.95,
+        "formatted": "$185",
+        "pricingOptionId": "dyBruJQqkhbU"
+      },
+      "legs": [
+        {
+          "id": "13542-2412131355--31685-1-10413-2412132105",
+          "origin": {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick",
+            "displayCode": "LGW",
+            "city": "London",
+            "country": "United Kingdom",
+            "isHighlighted": false
+          },
+          "destination": {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle",
+            "displayCode": "CDG",
+            "city": "Paris",
+            "country": "France",
+            "isHighlighted": false
+          },
+          "durationInMinutes": 370,
+          "stopCount": 1,
+          "isSmallestStops": false,
+          "departure": "2024-12-13T13:55:00",
+          "arrival": "2024-12-13T21:05:00",
+          "timeDeltaInDays": 0,
+          "carriers": {
+            "marketing": [
+              {
+                "id": -31685,
+                "alternateId": "07",
+                "logoUrl": "https:\/\/logos.skyscnr.com\/images\/airlines\/favicon\/07.png",
+                "name": "Vueling Airlines"
+              }
+            ],
+            "operationType": "fully_operated"
+          },
+          "segments": [
+            {
+              "id": "13542-9772-2412131355-2412131655--31685",
+              "origin": {
+                "flightPlaceId": "LGW",
+                "displayCode": "LGW",
+                "parent": {
+                  "flightPlaceId": "LOND",
+                  "displayCode": "LON",
+                  "name": "London",
+                  "type": "City"
+                },
+                "name": "London Gatwick",
+                "type": "Airport",
+                "country": "United Kingdom"
+              },
+              "destination": {
+                "flightPlaceId": "BCN",
+                "displayCode": "BCN",
+                "parent": {
+                  "flightPlaceId": "BARC",
+                  "displayCode": "BCN",
+                  "name": "Barcelona",
+                  "type": "City"
+                },
+                "name": "Barcelona",
+                "type": "Airport",
+                "country": "Spain"
+              },
+              "departure": "2024-12-13T13:55:00",
+              "arrival": "2024-12-13T16:55:00",
+              "durationInMinutes": 120,
+              "flightNumber": "7841",
+              "marketingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            },
+            {
+              "id": "9772-10413-2412131905-2412132105--31685",
+              "origin": {
+                "flightPlaceId": "BCN",
+                "displayCode": "BCN",
+                "parent": {
+                  "flightPlaceId": "BARC",
+                  "displayCode": "BCN",
+                  "name": "Barcelona",
+                  "type": "City"
+                },
+                "name": "Barcelona",
+                "type": "Airport",
+                "country": "Spain"
+              },
+              "destination": {
+                "flightPlaceId": "CDG",
+                "displayCode": "CDG",
+                "parent": {
+                  "flightPlaceId": "PARI",
+                  "displayCode": "PAR",
+                  "name": "Paris",
+                  "type": "City"
+                },
+                "name": "Paris Charles de Gaulle",
+                "type": "Airport",
+                "country": "France"
+              },
+              "departure": "2024-12-13T19:05:00",
+              "arrival": "2024-12-13T21:05:00",
+              "durationInMinutes": 120,
+              "flightNumber": "8240",
+              "marketingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              },
+              "operatingCarrier": {
+                "id": -31685,
+                "name": "Vueling Airlines",
+                "alternateId": "07",
+                "allianceId": 0,
+                "displayCode": ""
+              }
+            }
+          ]
+        }
+      ],
+      "isSelfTransfer": true,
+      "isProtectedSelfTransfer": false,
+      "farePolicy": {
+        "isChangeAllowed": false,
+        "isPartiallyChangeable": false,
+        "isCancellationAllowed": false,
+        "isPartiallyRefundable": false
+      },
+      "fareAttributes": [],
+      "isMashUp": true,
+      "hasFlexibleOptions": false,
+      "score": 0.362956
+    }
+  ],
+  "messages": [],
+  "filterStats": {
+    "duration": {
+      "min": 75,
+      "max": 510,
+      "multiCityMin": 75,
+      "multiCityMax": 510
+    },
+    "airports": [
+      {
+        "city": "London",
+        "airports": [
+          {
+            "id": "LGW",
+            "entityId": "95565051",
+            "name": "London Gatwick"
+          }
+        ]
+      },
+      {
+        "city": "Paris",
+        "airports": [
+          {
+            "id": "CDG",
+            "entityId": "95565041",
+            "name": "Paris Charles de Gaulle"
+          }
+        ]
+      }
+    ],
+    "stopPrices": {
+      "direct": {
+        "isPresent": true,
+        "formattedPrice": "$143"
+      },
+      "one": {
+        "isPresent": true,
+        "formattedPrice": "$121"
+      },
+      "twoOrMore": {
+        "isPresent": false
+      }
+    }
+  },
+  "flightsSessionId": "c6a155e6-1ec3-4952-b4a4-fc0d5cf8061e",
+  "destinationImageUrl": "https:\/\/content.skyscnr.com\/m\/3719e8f4a5daf43d\/original\/Flights-Placeholder.jpg",
+  "sessionId": "c6a155e6-1ec3-4952-b4a4-fc0d5cf8061e"
+}
