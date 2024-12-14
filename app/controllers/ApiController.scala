@@ -2,7 +2,7 @@ package controllers
 
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.{AirportService, FlightService, TripCreator}
+import services.{AirportService, FlightService, HttpApiService, TripCreator}
 
 import javax.inject._
 
@@ -13,7 +13,7 @@ import javax.inject._
 @Singleton
 class ApiController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  private val tripCreator = new TripCreator(new FlightService(???, new AirportService))
+  private val tripCreator = new TripCreator(new FlightService(new HttpApiService, new AirportService))
 
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val trips = tripCreator.create("LHR", "CDG", "2024-12-18")
