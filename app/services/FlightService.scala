@@ -18,6 +18,10 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
 
     val jsonResponse = apiService.get("/retrieveFlights", params)
 
+    mapItinerariesToFlights(jsonResponse)
+  }
+
+  private def mapItinerariesToFlights(jsonResponse: JsValue) = {
     (jsonResponse \ "itineraries").as[List[JsValue]]
       .map(itinerary => (itinerary \ "legs").as[List[JsValue]])
       .filter(legs => legs.length == 1)
@@ -27,5 +31,4 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
       .map(segments => segments.head)
       .map(segment => segment.as[Flight])
   }
-
 }
