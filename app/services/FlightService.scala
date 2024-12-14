@@ -2,6 +2,7 @@ package services
 
 import model.Flight
 import play.api.libs.json.JsValue
+import services.FlightService.RetrieveFlightsEndpoint
 
 class FlightService(apiService: ApiService, airportService: AirportService) {
   def getFlights(fromCode: String, toCode: String): List[Flight] = {
@@ -16,7 +17,7 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
       "date" -> "2024-12-13"
     )
 
-    val jsonResponse = apiService.get("/retrieveFlights", params)
+    val jsonResponse = apiService.get(RetrieveFlightsEndpoint, params)
 
     mapItinerariesToFlights(jsonResponse)
   }
@@ -31,4 +32,8 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
       .map(segments => segments.head)
       .map(segment => segment.as[Flight])
   }
+}
+
+object FlightService {
+  val RetrieveFlightsEndpoint = "/retrieveFlights"
 }
