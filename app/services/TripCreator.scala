@@ -2,17 +2,19 @@ package services
 
 import model.Trip
 
-class TripCreator(flightCache: FlightService) {
+class TripCreator(flightService: FlightService) {
 
   def create(fromCode: String, toCode: String, date: String): List[Trip] = {
-    val outboundFlights = flightCache.getFlights(fromCode, toCode, date)
+    val outboundFlights = flightService.getFlights(fromCode, toCode, date)
 
-    val inboundFlights = flightCache.getFlights(toCode, fromCode, date)
+    val inboundFlights = flightService.getFlights(toCode, fromCode, date)
 
-    for {
+    val trips = for {
       outbound <- outboundFlights
       inbound <- inboundFlights
       if inbound.departureTime.isAfter(outbound.arrivalTime)
     } yield Trip(toCode, outbound, inbound)
+
+    trips.sortBy(_.timeAtDestination).reverse.take(10)
   }
 }
