@@ -21,7 +21,7 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
       Airport("ORY", "Paris Orly", "ORY", "95565040"))
   }
 
-  "Airport Service" should "return SkyId and EntityId for a given iata code" in {
+  it should "return SkyId and EntityId for a given iata code" in {
     // Create an instance of AirportCache with the mocked ApiService
     val airportCache = new AirportService()
 

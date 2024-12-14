@@ -2,7 +2,7 @@ package services
 
 import model.Flight
 import play.api.libs.json.JsValue
-import services.FlightService.RetrieveFlightsEndpoint
+import services.FlightService.{RetrieveFlightsEndpoint, RetrieveFlightsIncompleteEndpoint}
 
 class FlightService(apiService: ApiService, airportService: AirportService) {
   def getFlights(fromCode: String, toCode: String): List[Flight] = {
@@ -17,9 +17,19 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
       "date" -> "2024-12-13"
     )
 
-    val jsonResponse = apiService.get(RetrieveFlightsEndpoint, params)
+    var jsonResponse = apiService.get(RetrieveFlightsEndpoint, params)
+    var status = (jsonResponse \ "context" \ "status").asOpt[String].getOrElse("complete")
+    val responses = scala.collection.mutable.ListBuffer[JsValue](jsonResponse)
 
-    mapItinerariesToFlights(jsonResponse)
+    while (status == "incomplete") {
+      val sessionId = (jsonResponse \ "context" \ "sessionId").as[String]
+      val incompleteParams = Map("sessionId" -> sessionId)
+      jsonResponse = apiService.get(RetrieveFlightsIncompleteEndpoint, incompleteParams)
+      status = (jsonResponse \ "status").asOpt[String].getOrElse("complete")
+      responses += jsonResponse
+    }
+
+    responses.flatMap(mapItinerariesToFlights).toList
   }
 
   private def mapItinerariesToFlights(jsonResponse: JsValue) = {
@@ -36,4 +46,5 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
 
 object FlightService {
   val RetrieveFlightsEndpoint = "/retrieveFlights"
+  val RetrieveFlightsIncompleteEndpoint = "/retrieveFlightsIncomplete"
 }
