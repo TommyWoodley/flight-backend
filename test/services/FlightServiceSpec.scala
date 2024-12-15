@@ -80,4 +80,36 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     verify(mockApiService).get(incompleteEndpoint, incompleteParams)
     result should have size 8
   }
+
+  it should "retrieve flights with non-zero prices" in {
+    // Arrange
+    val mockApiService = mock[ApiService]
+    val flightService = new FlightService(mockApiService, new AirportService)
+    val fromCode = "LGW"
+    val toCode = "CDG"
+    val endpoint = "/retrieveFlights"
+    val params = Map(
+      "originSkyId" -> "LGW",
+      "destinationSkyId" -> "CDG",
+      "originEntityId" -> "95565051",
+      "destinationEntityId" -> "95565041",
+      "date" -> "2024-12-13"
+    )
+
+    // Load the completeFlightsJson from the file
+    val source = Source.fromFile("httpRequests/flightLabs/completeFlights.json")
+    val jsonString = try source.mkString finally source.close()
+    val json = Json.parse(jsonString)
+
+    // Configure the mock to return the completeFlightsJson
+    when(mockApiService.get(endpoint, params)).thenReturn(json)
+
+    // Act
+    val result = flightService.getFlights(fromCode, toCode, "2024-12-13")
+
+    // Assert
+    verify(mockApiService).get(endpoint, params)
+    result should have size 4
+    all(result.map(_.price)) should not be 0.0
+  }
 }

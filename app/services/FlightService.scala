@@ -34,13 +34,13 @@ class FlightService(apiService: ApiService, airportService: AirportService) {
 
   private def mapItinerariesToFlights(jsonResponse: JsValue) = {
     (jsonResponse \ "itineraries").as[List[JsValue]]
-      .map(itinerary => (itinerary \ "legs").as[List[JsValue]])
-      .filter(legs => legs.length == 1)
-      .map(legs => legs.head)
-      .map(leg => (leg \ "segments").as[List[JsValue]])
-      .filter(segments => segments.length == 1)
-      .map(segments => segments.head)
-      .map(segment => segment.as[Flight])
+      .map(itinerary => ((itinerary \ "legs").as[List[JsValue]], (itinerary \ "price" \ "raw").as[Double]))
+      .filter { case (legs, _) => legs.length == 1 }
+      .map { case (legs, price) => (legs.head, price) }
+      .map { case (leg, price) => ((leg \ "segments").as[List[JsValue]], price) }
+      .filter { case (segments, _) => segments.length == 1 }
+      .map { case (segments, price) => (segments.head, price) }
+      .map { case (segment, price) => segment.as[Flight].copy(price = price) }
   }
 }
 
