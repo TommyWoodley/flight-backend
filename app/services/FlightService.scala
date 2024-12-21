@@ -29,18 +29,22 @@ class FlightService(apiService: ApiService) {
       responses += jsonResponse
     }
 
-    responses.flatMap(mapItinerariesToFlights).toList
+    responses.flatMap(mapItinerariesToFlights).toList.distinct
   }
 
   private def mapItinerariesToFlights(jsonResponse: JsValue) = {
-    (jsonResponse \ "itineraries").as[List[JsValue]]
-      .map(itinerary => ((itinerary \ "legs").as[List[JsValue]], (itinerary \ "price" \ "raw").as[Double]))
-      .filter { case (legs, _) => legs.length == 1 }
-      .map { case (legs, price) => (legs.head, price) }
-      .map { case (leg, price) => ((leg \ "segments").as[List[JsValue]], price) }
-      .filter { case (segments, _) => segments.length == 1 }
-      .map { case (segments, price) => (segments.head, price) }
-      .map { case (segment, price) => segment.as[Flight].copy(price = price) }
+    (jsonResponse \ "itineraries").asOpt[List[JsValue]] match {
+      case Some(itineraries) =>
+        itineraries
+          .map(itinerary => ((itinerary \ "legs").as[List[JsValue]], (itinerary \ "price" \ "raw").as[Double]))
+          .filter { case (legs, _) => legs.length == 1 }
+          .map { case (legs, price) => (legs.head, price) }
+          .map { case (leg, price) => ((leg \ "segments").as[List[JsValue]], price) }
+          .filter { case (segments, _) => segments.length == 1 }
+          .map { case (segments, price) => (segments.head, price) }
+          .map { case (segment, price) => segment.as[Flight].copy(price = price) }
+      case None => List.empty[Flight]
+    }
   }
 }
 

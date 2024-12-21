@@ -1,5 +1,33 @@
 [
   {
+    "name": "Amsterdam Schiphol",
+    "iata_code": "AMS",
+    "skyId": "AMS",
+    "entityId": "95565044",
+    "country": "Netherlands"
+  },
+  {
+    "name": "Athens International",
+    "iata_code": "ATH",
+    "skyId": "ATH",
+    "entityId": "95673624",
+    "country": "Greece"
+  },
+  {
+    "name": "Belgrade Nikola Tesla",
+    "iata_code": "BEG",
+    "skyId": "BEG",
+    "entityId": "95673488",
+    "country": "Serbia"
+  },
+  {
+    "name": "Berlin Brandenburg",
+    "iata_code": "BER",
+    "skyId": "BER",
+    "entityId": "95673383",
+    "country": "Germany"
+  },
+  {
     "name": "London City Airport",
     "iata_code": "LCY",
     "skyId": "LCY",

@@ -18,7 +18,7 @@ class ApiController @Inject()(val controllerComponents: ControllerComponents) ex
   private val tripCreator = new TripCreator(new FlightService(new HttpApiService), airportService)
 
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val trips = tripCreator.create("LHR", "CDG", LocalDate.of(2025, 1, 18), 2)
+    val trips = tripCreator.create("LHR", LocalDate.of(2025, 1, 18), 2)
     val jsonResponse = Json.toJson(trips)
     Ok(jsonResponse)
   }

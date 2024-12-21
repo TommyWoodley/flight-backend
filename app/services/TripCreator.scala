@@ -12,30 +12,37 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
   private val logger: Logger = Logger(this.getClass)
   private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(5))
 
-  def create(fromCode: String, toCode: String, date: LocalDate, numberOfDays: Int): List[Trip] = {
-    logger.info(s"Creating trips from $fromCode to $toCode on $date")
+  def create(fromCode: String, date: LocalDate, numberOfDays: Int): List[Trip] = {
+    logger.info(s"Creating trips from $fromCode on $date")
 
     val outboundAirport = airportService.getAirportByCode(fromCode)
-    val inboundAirport = airportService.getAirportByCode(toCode)
+    val destinationAirports = airportService.getAllAirportsInADifferentCountry(outboundAirport.country)
 
-    val outboundFlightsFuture = Future {
-      flightService.getFlights(outboundAirport, inboundAirport, date)
-    }
-    val inboundFlightsFuture = Future {
-      flightService.getFlights(inboundAirport, outboundAirport, date.plusDays(numberOfDays))
-    }
+    val tripsFutures = destinationAirports.map { inboundAirport =>
+      val outboundFlightsFuture = Future {
+        flightService.getFlights(outboundAirport, inboundAirport, date)
+      }
+      val inboundFlightsFuture = Future {
+        flightService.getFlights(inboundAirport, outboundAirport, date.plusDays(numberOfDays))
+      }
 
-    val tripsFuture = for {
-      outboundFlights <- outboundFlightsFuture
-      inboundFlights <- inboundFlightsFuture
-    } yield {
       for {
-        outbound <- outboundFlights
-        inbound <- inboundFlights
-        if inbound.departureTime.isAfter(outbound.arrivalTime)
-      } yield Trip(toCode, outbound, inbound)
+        outboundFlights <- outboundFlightsFuture
+        inboundFlights <- inboundFlightsFuture
+      } yield {
+        for {
+          outbound <- outboundFlights
+          inbound <- inboundFlights
+          if inbound.departureTime.isAfter(outbound.arrivalTime)
+        } yield Trip(inboundAirport.country, outbound, inbound)
+      }
     }
 
-    Await.result(tripsFuture, 30.seconds).sortBy(_.pricePerHour).take(10)
+    val tripsFuture = Future.sequence(tripsFutures).map(_.flatten)
+    val trips = Await.result(tripsFuture, 30.seconds)
+
+    trips.groupBy(_.destination).values.flatMap { trips =>
+      trips.sortBy(_.pricePerHour).headOption
+    }.toList
   }
 }
