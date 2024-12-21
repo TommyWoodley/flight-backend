@@ -12,8 +12,9 @@ class HttpApiService extends ApiService {
   override def get(endpoint: String, params: Map[String, String]): JsValue = {
     val fullUrl = s"$baseUrl$endpoint"
     val paramsWithKey = params + ("access_key" -> flightLabsApiKey)
+    val threadName = Thread.currentThread().getName
 
-    logger.info(s"Making request to $fullUrl with params $params")
+    logger.info(s"$threadName: Making request to $fullUrl with params $params")
 
     val response = Http(fullUrl)
       .params(paramsWithKey)

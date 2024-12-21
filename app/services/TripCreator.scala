@@ -3,21 +3,34 @@ package services
 import model.Trip
 import play.api.Logger
 
+import java.util.concurrent.Executors
+import scala.concurrent.duration.DurationInt
+import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
+
 class TripCreator(flightService: FlightService) {
   private val logger: Logger = Logger(this.getClass)
+  private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(5))
 
   def create(fromCode: String, toCode: String, date: String): List[Trip] = {
     logger.info(s"Creating trips from $fromCode to $toCode on $date")
-    val outboundFlights = flightService.getFlights(fromCode, toCode, date)
+    val outboundFlightsFuture = Future {
+      flightService.getFlights(fromCode, toCode, date)
+    }
+    val inboundFlightsFuture = Future {
+      flightService.getFlights(toCode, fromCode, date)
+    }
 
-    val inboundFlights = flightService.getFlights(toCode, fromCode, date)
+    val tripsFuture = for {
+      outboundFlights <- outboundFlightsFuture
+      inboundFlights <- inboundFlightsFuture
+    } yield {
+      for {
+        outbound <- outboundFlights
+        inbound <- inboundFlights
+        if inbound.departureTime.isAfter(outbound.arrivalTime)
+      } yield Trip(toCode, outbound, inbound)
+    }
 
-    val trips = for {
-      outbound <- outboundFlights
-      inbound <- inboundFlights
-      if inbound.departureTime.isAfter(outbound.arrivalTime)
-    } yield Trip(toCode, outbound, inbound)
-
-    trips.sortBy(_.timeAtDestination).reverse.take(10)
+    Await.result(tripsFuture, 30.seconds).sortBy(_.timeAtDestination).reverse.take(10)
   }
 }
