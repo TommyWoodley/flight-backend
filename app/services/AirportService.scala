@@ -15,8 +15,14 @@ class AirportService {
 
   def allAirports: List[Airport] = airports
 
-  def getAirport(iata: String): Option[(String, String)] = airports
-    .find(_.code == iata)
-    .map(a => (a.skyId, a.entity))
+  def getAirport(iata: String): Option[(String, String)] =
+    airports
+      .find(_.code == iata)
+      .map(a => (a.skyId, a.entity))
+
+  def getAirportByCode(code: String): Airport =
+    airports
+      .find(_.code == code)
+      .getOrElse(throw new NoSuchElementException(s"Airport with code $code not found"))
 
 }

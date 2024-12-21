@@ -32,4 +32,14 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
     airportCache.getAirport("LTN") must be(Some(("LTN", "95565053")))
   }
 
+  it should "return the full Airport object for a given code" in {
+    val airportService = new AirportService()
+
+    airportService.getAirportByCode("LCY") must be(Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom"))
+    airportService.getAirportByCode("LGW") must be(Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom"))
+    airportService.getAirportByCode("LHR") must be(Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom"))
+    airportService.getAirportByCode("STN") must be(Airport("STN", "London Stansted Airport", "STN", "95565052", "United Kingdom"))
+    airportService.getAirportByCode("LTN") must be(Airport("LTN", "Luton Airport", "LTN", "95565053", "United Kingdom"))
+  }
+
 }

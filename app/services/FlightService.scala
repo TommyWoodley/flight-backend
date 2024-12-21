@@ -1,22 +1,19 @@
 package services
 
-import model.Flight
+import model.{Airport, Flight}
 import play.api.libs.json.JsValue
 import services.FlightService.{RetrieveFlightsEndpoint, RetrieveFlightsIncompleteEndpoint}
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class FlightService(apiService: ApiService, airportService: AirportService) {
-  def getFlights(fromCode: String, toCode: String, date: LocalDate): List[Flight] = {
-    val fromAirport = airportService.getAirport(fromCode)
-    val toAirport = airportService.getAirport(toCode)
-
+class FlightService(apiService: ApiService) {
+  def getFlights(from: Airport, to: Airport, date: LocalDate): List[Flight] = {
     val params = Map(
-      "originSkyId" -> fromAirport.map(_._1).getOrElse(""),
-      "destinationSkyId" -> toAirport.map(_._1).getOrElse(""),
-      "originEntityId" -> fromAirport.map(_._2).getOrElse(""),
-      "destinationEntityId" -> toAirport.map(_._2).getOrElse(""),
+      "originSkyId" -> from.skyId,
+      "destinationSkyId" -> to.skyId,
+      "originEntityId" -> from.entity,
+      "destinationEntityId" -> to.entity,
       "date" -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)
     )
 

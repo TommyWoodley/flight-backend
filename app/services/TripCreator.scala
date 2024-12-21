@@ -8,18 +8,21 @@ import java.util.concurrent.Executors
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
 
-class TripCreator(flightService: FlightService) {
+class TripCreator(flightService: FlightService, airportService: AirportService) {
   private val logger: Logger = Logger(this.getClass)
   private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(5))
 
   def create(fromCode: String, toCode: String, date: LocalDate, numberOfDays: Int): List[Trip] = {
     logger.info(s"Creating trips from $fromCode to $toCode on $date")
 
+    val outboundAirport = airportService.getAirportByCode(fromCode)
+    val inboundAirport = airportService.getAirportByCode(toCode)
+
     val outboundFlightsFuture = Future {
-      flightService.getFlights(fromCode, toCode, date)
+      flightService.getFlights(outboundAirport, inboundAirport, date)
     }
     val inboundFlightsFuture = Future {
-      flightService.getFlights(toCode, fromCode, date.plusDays(numberOfDays))
+      flightService.getFlights(inboundAirport, outboundAirport, date.plusDays(numberOfDays))
     }
 
     val tripsFuture = for {
