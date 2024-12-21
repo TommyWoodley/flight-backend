@@ -3,6 +3,7 @@ package services
 import model.Trip
 import play.api.Logger
 
+import java.time.LocalDate
 import java.util.concurrent.Executors
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
@@ -11,7 +12,7 @@ class TripCreator(flightService: FlightService) {
   private val logger: Logger = Logger(this.getClass)
   private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(5))
 
-  def create(fromCode: String, toCode: String, date: String): List[Trip] = {
+  def create(fromCode: String, toCode: String, date: LocalDate): List[Trip] = {
     logger.info(s"Creating trips from $fromCode to $toCode on $date")
     val outboundFlightsFuture = Future {
       flightService.getFlights(fromCode, toCode, date)

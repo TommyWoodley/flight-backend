@@ -4,6 +4,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import services.{AirportService, FlightService, HttpApiService, TripCreator}
 
+import java.time.LocalDate
 import javax.inject._
 
 /**
@@ -16,7 +17,7 @@ class ApiController @Inject()(val controllerComponents: ControllerComponents) ex
   private val tripCreator = new TripCreator(new FlightService(new HttpApiService, new AirportService))
 
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val trips = tripCreator.create("LHR", "CDG", "2025-01-18")
+    val trips = tripCreator.create("LHR", "CDG", LocalDate.of(2025, 1, 18))
     val jsonResponse = Json.toJson(trips)
     Ok(jsonResponse)
   }

@@ -6,6 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.libs.json.Json
 
+import java.time.LocalDate
 import scala.io.Source
 
 class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
@@ -16,6 +17,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val flightService = new FlightService(mockApiService, new AirportService)
     val fromCode = "LGW"
     val toCode = "CDG"
+    val date = LocalDate.of(2024, 12, 13)
     val endpoint = "/retrieveFlights"
     val params = Map(
       "originSkyId" -> "LGW",
@@ -34,7 +36,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockApiService.get(endpoint, params)).thenReturn(json)
 
     // Act
-    val result = flightService.getFlights(fromCode, toCode, "2024-12-13")
+    val result = flightService.getFlights(fromCode, toCode, date)
 
     // Assert
     verify(mockApiService).get(endpoint, params)
@@ -49,6 +51,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val toCode = "CDG"
     val endpoint = "/retrieveFlights"
     val incompleteEndpoint = "/retrieveFlightsIncomplete"
+    val date = LocalDate.of(2024, 12, 13)
     val params = Map(
       "originSkyId" -> "LGW",
       "destinationSkyId" -> "CDG",
@@ -73,7 +76,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockApiService.get(incompleteEndpoint, incompleteParams)).thenReturn(jsonComplete)
 
     // Act
-    val result = flightService.getFlights(fromCode, toCode, "2024-12-13")
+    val result = flightService.getFlights(fromCode, toCode, date)
 
     // Assert
     verify(mockApiService).get(endpoint, params)
@@ -87,6 +90,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val flightService = new FlightService(mockApiService, new AirportService)
     val fromCode = "LGW"
     val toCode = "CDG"
+    val date = LocalDate.of(2024, 12, 13)
     val endpoint = "/retrieveFlights"
     val params = Map(
       "originSkyId" -> "LGW",
@@ -105,7 +109,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     when(mockApiService.get(endpoint, params)).thenReturn(json)
 
     // Act
-    val result = flightService.getFlights(fromCode, toCode, "2024-12-13")
+    val result = flightService.getFlights(fromCode, toCode, date)
 
     // Assert
     verify(mockApiService).get(endpoint, params)
