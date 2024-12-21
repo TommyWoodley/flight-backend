@@ -10,6 +10,9 @@ case class Trip(destination: String, outbound: Flight, inbound: Flight) {
 
   def totalPrice: Double =
     outbound.price + inbound.price
+
+  def pricePerHour: Double =
+    if (timeAtDestination > 0) totalPrice / timeAtDestination else totalPrice
 }
 
 object Trip {

@@ -31,6 +31,6 @@ class TripCreator(flightService: FlightService) {
       } yield Trip(toCode, outbound, inbound)
     }
 
-    Await.result(tripsFuture, 30.seconds).sortBy(_.timeAtDestination).reverse.take(10)
+    Await.result(tripsFuture, 30.seconds).sortBy(_.pricePerHour).take(10)
   }
 }
