@@ -42,4 +42,14 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
     airportService.getAirportByCode("LTN") must be(Airport("LTN", "Luton Airport", "LTN", "95565053", "United Kingdom"))
   }
 
+  it should "return all airports in a different country" in {
+    val airportService = new AirportService()
+
+    val result = airportService.getAllAirportsInADifferentCountry("United Kingdom")
+    result must contain theSameElementsAs List(
+      Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France"),
+      Airport("ORY", "Paris Orly", "ORY", "95565040", "France")
+    )
+  }
+
 }
