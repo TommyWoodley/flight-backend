@@ -22,7 +22,8 @@ object Trip {
       "outbound" -> Json.toJson(trip.outbound),
       "inbound" -> Json.toJson(trip.inbound),
       "timeAtDestination" -> Json.toJson(trip.timeAtDestination),
-      "totalPrice" -> Json.toJson(trip.totalPrice)
+      "totalPrice" -> Json.toJson(trip.totalPrice),
+      "pricePerHour" -> Json.toJson(trip.pricePerHour)
     )
   }
 }

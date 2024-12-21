@@ -12,13 +12,14 @@ class TripCreator(flightService: FlightService) {
   private val logger: Logger = Logger(this.getClass)
   private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(5))
 
-  def create(fromCode: String, toCode: String, date: LocalDate): List[Trip] = {
+  def create(fromCode: String, toCode: String, date: LocalDate, numberOfDays: Int): List[Trip] = {
     logger.info(s"Creating trips from $fromCode to $toCode on $date")
+
     val outboundFlightsFuture = Future {
       flightService.getFlights(fromCode, toCode, date)
     }
     val inboundFlightsFuture = Future {
-      flightService.getFlights(toCode, fromCode, date)
+      flightService.getFlights(toCode, fromCode, date.plusDays(numberOfDays))
     }
 
     val tripsFuture = for {
