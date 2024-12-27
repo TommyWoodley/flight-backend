@@ -1,4 +1,4 @@
-GET https://www.goflightlabs.com/retrieveAirport?access_key={{FLIGHT_LABS_API}}&query=Paris
+GET https://www.goflightlabs.com/retrieveAirport?access_key={{FLIGHT_LABS_API}}&query=Berlin
 Accept: application/json
 
 ###

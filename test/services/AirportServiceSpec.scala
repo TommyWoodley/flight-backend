@@ -11,7 +11,7 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
     // Create an instance of AirportCache with the mocked ApiService
     val airportCache = new AirportService()
 
-    airportCache.allAirports must contain theSameElementsAs List(
+    airportCache.allAirports must contain allOf (
       Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom"),
       Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom"),
       Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom"),
@@ -46,7 +46,7 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
     val airportService = new AirportService()
 
     val result = airportService.getAllAirportsInADifferentCountry("United Kingdom")
-    result must contain theSameElementsAs List(
+    result must contain allOf (
       Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France"),
       Airport("ORY", "Paris Orly", "ORY", "95565040", "France")
     )
