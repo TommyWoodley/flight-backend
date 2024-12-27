@@ -34,7 +34,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val json = Json.parse(jsonString)
 
     // Configure the mock to return the completeFlightsJson
-    when(mockApiService.get(endpoint, params)).thenReturn(json)
+    when(mockApiService.get(endpoint, params)).thenReturn(Some(json))
 
     // Act
     val result = flightService.getFlights(from, to, date)
@@ -71,8 +71,8 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val jsonComplete = Json.parse(jsonStringComplete)
 
     // Configure the mock to return the incompleteFlightsJson
-    when(mockApiService.get(endpoint, params)).thenReturn(jsonIncomplete)
-    when(mockApiService.get(incompleteEndpoint, incompleteParams)).thenReturn(jsonComplete)
+    when(mockApiService.get(endpoint, params)).thenReturn(Some(jsonIncomplete))
+    when(mockApiService.get(incompleteEndpoint, incompleteParams)).thenReturn(Some(jsonComplete))
 
     // Act
     val result = flightService.getFlights(from, to, date)
@@ -103,7 +103,7 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val json = Json.parse(jsonString)
 
     // Configure the mock to return the completeFlightsJson
-    when(mockApiService.get(endpoint, params)).thenReturn(json)
+    when(mockApiService.get(endpoint, params)).thenReturn(Some(json))
 
     // Act
     val result = flightService.getFlights(from, to, date)
@@ -112,5 +112,65 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     verify(mockApiService).get(endpoint, params)
     result should have size 4
     all(result.map(_.price)) should not be 0.0
+  }
+
+  it should "handle the scenario where the first call to the endpoint fails" in {
+    // Arrange
+    val mockApiService = mock[ApiService]
+    val flightService = new FlightService(mockApiService)
+    val date = LocalDate.of(2024, 12, 13)
+    val endpoint = "/retrieveFlights"
+    val params = Map(
+      "originSkyId" -> "LGW",
+      "destinationSkyId" -> "CDG",
+      "originEntityId" -> "95565051",
+      "destinationEntityId" -> "95565041",
+      "date" -> "2024-12-13"
+    )
+
+    // Configure the mock to return None
+    when(mockApiService.get(endpoint, params)).thenReturn(None)
+
+    // Act
+    val result = flightService.getFlights(from, to, date)
+
+    // Assert
+    verify(mockApiService).get(endpoint, params)
+    result shouldBe empty
+  }
+
+  it should "handle the scenario where the first call succeeds and the second call fails" in {
+    // Arrange
+    val mockApiService = mock[ApiService]
+    val flightService = new FlightService(mockApiService)
+    val endpoint = "/retrieveFlights"
+    val incompleteEndpoint = "/retrieveFlightsIncomplete"
+    val date = LocalDate.of(2024, 12, 13)
+    val params = Map(
+      "originSkyId" -> "LGW",
+      "destinationSkyId" -> "CDG",
+      "originEntityId" -> "95565051",
+      "destinationEntityId" -> "95565041",
+      "date" -> "2024-12-13"
+    )
+    val sessionId = "Cl0IARJZCk4KJGM2YTE1NWU2LTFlYzMtNDk1Mi1iNGE0LWZjMGQ1Y2Y4MDYxZRACGiRlNzM1NzQwZS0yYjQ1LTRkNGUtYWY2NS1hOTQxNzRlZjI1OTgQh_nLuboyGAESKHVzc19lMjViN2QwZi1mYjJjLTQxODEtYTAzZC00YmYxMzYyOTk5NGU="
+    val incompleteParams = Map("sessionId" -> sessionId)
+
+    // Load the incompleteFlightsJson from the file
+    val sourceIncomplete = Source.fromFile("httpRequests/flightLabs/incompleteFlights.json")
+    val jsonStringIncomplete = try sourceIncomplete.mkString finally sourceIncomplete.close()
+    val jsonIncomplete = Json.parse(jsonStringIncomplete)
+
+    // Configure the mock to return the incompleteFlightsJson and then None
+    when(mockApiService.get(endpoint, params)).thenReturn(Some(jsonIncomplete))
+    when(mockApiService.get(incompleteEndpoint, incompleteParams)).thenReturn(None)
+
+    // Act
+    val result = flightService.getFlights(from, to, date)
+
+    // Assert
+    verify(mockApiService).get(endpoint, params)
+    verify(mockApiService).get(incompleteEndpoint, incompleteParams)
+    result should have size 4
   }
 }

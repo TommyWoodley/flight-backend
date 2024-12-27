@@ -17,16 +17,23 @@ class FlightService(apiService: ApiService) {
       "date" -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)
     )
 
-    var jsonResponse = apiService.get(RetrieveFlightsEndpoint, params)
-    var status = (jsonResponse \ "context" \ "status").asOpt[String].getOrElse("complete")
-    val responses = scala.collection.mutable.ListBuffer[JsValue](jsonResponse)
+    var jsonResponseOpt = apiService.get(RetrieveFlightsEndpoint, params)
+    var status = jsonResponseOpt.flatMap(json => (json \ "context" \ "status").asOpt[String]).getOrElse("complete")
+    val responses = scala.collection.mutable.ListBuffer[JsValue]()
+
+    jsonResponseOpt.foreach(responses += _)
 
     while (status == "incomplete") {
-      val sessionId = (jsonResponse \ "context" \ "sessionId").as[String]
-      val incompleteParams = Map("sessionId" -> sessionId)
-      jsonResponse = apiService.get(RetrieveFlightsIncompleteEndpoint, incompleteParams)
-      status = (jsonResponse \ "status").asOpt[String].getOrElse("complete")
-      responses += jsonResponse
+      val sessionIdOpt = jsonResponseOpt.flatMap(json => (json \ "context" \ "sessionId").asOpt[String])
+      sessionIdOpt match {
+        case Some(sessionId) =>
+          val incompleteParams = Map("sessionId" -> sessionId)
+          jsonResponseOpt = apiService.get(RetrieveFlightsIncompleteEndpoint, incompleteParams)
+          status = jsonResponseOpt.flatMap(json => (json \ "status").asOpt[String]).getOrElse("complete")
+          jsonResponseOpt.foreach(responses += _)
+        case None =>
+          status = "complete"
+      }
     }
 
     responses.flatMap(mapItinerariesToFlights).toList.distinct
