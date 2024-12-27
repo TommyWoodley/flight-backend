@@ -7,3 +7,4 @@ target
 /.project
 /.settings
 /RUNNING_PID
+httpRequests/flightLabs/http-client.private.env.json
