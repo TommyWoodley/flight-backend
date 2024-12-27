@@ -10,7 +10,7 @@ import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Futu
 
 class TripCreator(flightService: FlightService, airportService: AirportService) {
   private val logger: Logger = Logger(this.getClass)
-  private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(5))
+  private implicit val executor: ExecutionContextExecutor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(20))
 
   def create(fromCode: String, date: LocalDate, numberOfDays: Int): List[Trip] = {
     logger.info(s"Creating trips from $fromCode on $date")
@@ -43,6 +43,6 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
 
     trips.groupBy(_.destination).values.flatMap { trips =>
       trips.sortBy(_.pricePerHour).headOption
-    }.toList
+    }.toList.sortBy(_.totalPrice)
   }
 }

@@ -1,4 +1,4 @@
-GET http://localhost:9000/api/data
+GET http://localhost:9000/api/data?fromCode=LGW&date=2025-01-18&numberOfDays=2
 Accept: application/json
 
 ###
