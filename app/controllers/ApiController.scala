@@ -1,5 +1,6 @@
 package controllers
 
+import cache.{Cache, CachingApiService}
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.{AirportService, FlightService, HttpApiService, TripCreator}
@@ -11,7 +12,7 @@ import javax.inject._
 @Singleton
 class ApiController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
   private val airportService = new AirportService
-  private val tripCreator = new TripCreator(new FlightService(new HttpApiService), airportService)
+  private val tripCreator = new TripCreator(new FlightService(new CachingApiService(new HttpApiService, new Cache)), airportService)
 
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val fromCodeOpt = request.getQueryString("fromCode")
