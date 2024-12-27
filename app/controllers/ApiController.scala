@@ -1,6 +1,7 @@
 package controllers
 
 import cache.CachingApiService
+import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.{AirportService, FlightService, HttpApiService, TripCreator}
@@ -10,7 +11,7 @@ import java.time.format.{DateTimeFormatter, DateTimeParseException}
 import javax.inject._
 
 @Singleton
-class ApiController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class ApiController @Inject()(val controllerComponents: ControllerComponents, implicit val config: Configuration) extends BaseController {
   private val airportService = new AirportService
   private val tripCreator = new TripCreator(new FlightService(new CachingApiService(new HttpApiService)), airportService)
 
