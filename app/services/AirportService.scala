@@ -27,6 +27,9 @@ class AirportService {
       .find(_.code == code)
       .getOrElse(throw new NoSuchElementException(s"Airport with code $code not found"))
 
+  def getAirportsByCode(codes: List[String]): List[Airport] =
+    codes.map(getAirportByCode)
+
   def getAllAirportsInADifferentCountry(country: String): List[Airport] =
     airports.filter(_.country != country)
 

@@ -14,12 +14,19 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
     ExecutionContext.fromExecutor(Executors.newFixedThreadPool(20))
 
   def create(fromCode: String, date: LocalDate, numberOfDays: Int): List[Trip] = {
+    create(List(fromCode), date, numberOfDays)
+  }
+
+  def create(fromCode: List[String], date: LocalDate, numberOfDays: Int): List[Trip] = {
     logger.info(s"Creating trips from $fromCode on $date")
 
-    val outboundAirport     = airportService.getAirportByCode(fromCode)
-    val destinationAirports = airportService.getAllAirportsInADifferentCountry(outboundAirport.country)
+    val outboundAirports    = airportService.getAirportsByCode(fromCode)
+    val destinationAirports = airportService.getAllAirportsInADifferentCountry(outboundAirports.head.country)
 
-    val tripsFutures = destinationAirports.map { inboundAirport =>
+    val tripsFutures = for {
+      outboundAirport <- outboundAirports
+      inboundAirport  <- destinationAirports
+    } yield {
       val outboundFlightsFuture = Future {
         flightService.getFlights(outboundAirport, inboundAirport, date)
       }

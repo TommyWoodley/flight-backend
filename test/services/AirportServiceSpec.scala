@@ -65,4 +65,15 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
     )
   }
 
+  it should "return a list of Airport objects for given IATA codes" in {
+    val airportService = new AirportService()
+
+    val result = airportService.getAirportsByCode(List("LCY", "LGW", "LHR"))
+    result must contain allOf (
+      Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom"),
+      Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom"),
+      Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom")
+    )
+  }
+
 }

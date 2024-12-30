@@ -24,12 +24,13 @@ class ApiController @Inject() (val controllerComponents: ControllerComponents, i
     val destinationCountriesOpt = request.getQueryString("destinationCountries")
 
     (fromCodeOpt, dateStrOpt, numberOfDaysStrOpt) match {
-      case (Some(fromCode), Some(dateStr), Some(numberOfDaysStr)) =>
+      case (Some(fromCodeStr), Some(dateStr), Some(numberOfDaysStr)) =>
         try {
           val date         = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE)
           val numberOfDays = numberOfDaysStr.toInt
+          val fromCodes    = fromCodeStr.split(",").toList
 
-          val trips        = tripCreator.create(fromCode, date, numberOfDays)
+          val trips        = tripCreator.create(fromCodes, date, numberOfDays)
           val jsonResponse = Json.toJson(trips)
           Ok(jsonResponse)
         } catch {

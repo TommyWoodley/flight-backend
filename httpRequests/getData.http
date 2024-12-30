@@ -1,4 +1,4 @@
-GET http://localhost:9000/api/data?fromCode=LGW&date=2025-01-18&numberOfDays=2&destinationCountries=France,Spain
+GET http://localhost:9000/api/data?fromCode=LGW,LHR&date=2025-01-18&numberOfDays=2&destinationCountries=France,Spain
 Accept: application/json
 
 ###
