@@ -27,26 +27,27 @@ class FlightService(apiService: ApiService) {
     fetchIncompleteFlights(jsonResponseOpt)
   }
 
-  private def fetchIncompleteFlights(jsonResponseOpt: Option[JsValue]): List[Flight] = {
+  @tailrec
+  private def fetchIncompleteFlights(jsonResponseOpt: Option[JsValue], acc: List[Flight] = List.empty): List[Flight] = {
     jsonResponseOpt match {
       case Some(jsonResponse) =>
         val status      = (jsonResponse \ "context" \ "status").as[String]
         val itineraries = (jsonResponse \ "itineraries").as[List[JsValue]]
         status match {
-          case "complete"   => mapItinerariesToFlights(itineraries)
+          case "complete"   => acc ++ mapItinerariesToFlights(itineraries)
           case "incomplete" =>
             val sessionId             = (jsonResponse \ "context" \ "sessionId").as[String]
             val incompleteParams      = Map("sessionId" -> sessionId)
             val incompleteResponseOpt = apiService.get(RetrieveFlightsIncompleteEndpoint, incompleteParams)
-
-            fetchIncompleteFlights(incompleteResponseOpt) ++ mapItinerariesToFlights(itineraries)
+            val updatedAcc            = acc ++ mapItinerariesToFlights(itineraries)
+            fetchIncompleteFlights(incompleteResponseOpt, updatedAcc)
           case _            =>
             logger.warn(s"Unknown status: $status")
-            Nil
+            acc
         }
       case None               =>
         logger.warn("No JSON response")
-        Nil
+        acc
     }
   }
 
