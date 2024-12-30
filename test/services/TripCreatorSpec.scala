@@ -348,4 +348,42 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     trips should have size 1
     trips should contain(Trip("France", outboundFlight1, inboundFlight1))
   }
+
+  it should "create trips that start at different airports if that is cheaper" in {
+    when(airportService.getAirportsByCode(List(londonGatwickFromCode, londonHeathrowFromCode)))
+      .thenReturn(List(londonGatwickAirport, londonHeathrowAirport))
+    when(airportService.getAllAirportsInADifferentCountry(londonGatwickAirport.country))
+      .thenReturn(List(parisOrlyAirport))
+
+    val outboundFlight = Flight(
+      "flight123",
+      "SpeedyJet",
+      londonGatwickAirport,
+      parisOrlyAirport,
+      LocalDateTime.of(2025, 1, 18, 8, 0),
+      LocalDateTime.of(2025, 1, 18, 10, 0),
+      100
+    )
+    val inboundFlight  = Flight(
+      "flight345",
+      "AB Airlines",
+      parisOrlyAirport,
+      londonHeathrowAirport,
+      LocalDateTime.of(2025, 1, 20, 18, 0),
+      LocalDateTime.of(2025, 1, 20, 20, 0),
+      80
+    )
+
+    when(flightService.getFlights(londonGatwickAirport, parisOrlyAirport, date)).thenReturn(List(outboundFlight))
+    when(flightService.getFlights(londonHeathrowAirport, parisOrlyAirport, date)).thenReturn(Nil)
+    when(flightService.getFlights(parisOrlyAirport, londonGatwickAirport, date.plusDays(numberOfDays)))
+      .thenReturn(Nil)
+    when(flightService.getFlights(parisOrlyAirport, londonHeathrowAirport, date.plusDays(numberOfDays)))
+      .thenReturn(List(inboundFlight))
+
+    val trips = tripCreator.create(List(londonGatwickFromCode, londonHeathrowFromCode), date, numberOfDays)
+
+    trips should have size 1
+    trips should contain(Trip("France", outboundFlight, inboundFlight))
+  }
 }

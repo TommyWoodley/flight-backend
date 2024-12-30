@@ -1,6 +1,6 @@
 package services
 
-import model.Trip
+import model.{Airport, Flight, Trip}
 import play.api.Logger
 
 import java.time.LocalDate
@@ -17,37 +17,15 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
     create(List(fromCode), date, numberOfDays)
   }
 
-  def create(fromCode: List[String], date: LocalDate, numberOfDays: Int): List[Trip] = {
-    logger.info(s"Creating trips from $fromCode on $date")
+  def create(fromCode: List[String], outboundDate: LocalDate, numberOfDays: Int): List[Trip] = {
+    logger.info(s"Creating trips from $fromCode on $outboundDate")
 
     val outboundAirports    = airportService.getAirportsByCode(fromCode)
     val destinationAirports = airportService.getAllAirportsInADifferentCountry(outboundAirports.head.country)
 
-    val tripsFutures = for {
-      outboundAirport <- outboundAirports
-      inboundAirport  <- destinationAirports
-    } yield {
-      val outboundFlightsFuture = Future {
-        flightService.getFlights(outboundAirport, inboundAirport, date)
-      }
-      val inboundFlightsFuture  = Future {
-        flightService.getFlights(inboundAirport, outboundAirport, date.plusDays(numberOfDays))
-      }
+    val departureDate = outboundDate.plusDays(numberOfDays)
 
-      for {
-        outboundFlights <- outboundFlightsFuture
-        inboundFlights  <- inboundFlightsFuture
-      } yield {
-        for {
-          outbound <- outboundFlights
-          inbound  <- inboundFlights
-          if inbound.departureTime.isAfter(outbound.arrivalTime)
-        } yield Trip(inboundAirport.country, outbound, inbound)
-      }
-    }
-
-    val tripsFuture = Future.sequence(tripsFutures).map(_.flatten)
-    val trips       = Await.result(tripsFuture, 30.seconds)
+    val trips: List[Trip] = createAllTrips(outboundDate, outboundAirports, destinationAirports, departureDate)
 
     trips
       .groupBy(_.destination)
@@ -58,4 +36,42 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
       .toList
       .sortBy(_.totalPrice)
   }
+
+  private def createAllTrips(
+      outboundDate: LocalDate,
+      outboundAirports: List[Airport],
+      destinationAirports: List[Airport],
+      departureDate: LocalDate
+  ) = {
+    val outboundFlightsFutures = createFlightFutures(outboundDate, outboundAirports, destinationAirports)
+
+    val inboundFlightsFutures = createFlightFutures(departureDate, destinationAirports, outboundAirports)
+
+    val tripsFuture = for {
+      outboundFlightsLists <- outboundFlightsFutures
+      inboundFlightsLists  <- inboundFlightsFutures
+    } yield {
+      val outboundFlights = outboundFlightsLists.flatten
+      val inboundFlights  = inboundFlightsLists.flatten
+
+      for {
+        outbound <- outboundFlights
+        inbound  <- inboundFlights
+        if outbound.arrival == inbound.departure && inbound.departureTime.isAfter(outbound.arrivalTime)
+      } yield Trip(inbound.departure.country, outbound, inbound)
+    }
+
+    val trips = Await.result(tripsFuture, 60.seconds)
+    trips
+  }
+
+  private def createFlightFutures(date: LocalDate, fromAirports: List[Airport], toAirports: List[Airport]) =
+    Future.sequence {
+      for {
+        from <- fromAirports
+        to   <- toAirports
+      } yield Future {
+        flightService.getFlights(from, to, date)
+      }
+    }
 }
