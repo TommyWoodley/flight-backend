@@ -29,38 +29,36 @@ class FlightService(apiService: ApiService) {
 
   private def fetchIncompleteFlights(jsonResponseOpt: Option[JsValue]): List[Flight] = {
     jsonResponseOpt match {
-      case Some(jsonResponse) => {
-        val status = (jsonResponse \ "context" \ "status").as[String]
+      case Some(jsonResponse) =>
+        val status      = (jsonResponse \ "context" \ "status").as[String]
         val itineraries = (jsonResponse \ "itineraries").as[List[JsValue]]
         status match {
-          case "complete" => mapItinerariesToFlights(itineraries)
-          case "incomplete" => {
-            val sessionId = (jsonResponse \ "context" \ "sessionId").as[String]
-            val incompleteParams = Map("sessionId" -> sessionId)
+          case "complete"   => mapItinerariesToFlights(itineraries)
+          case "incomplete" =>
+            val sessionId             = (jsonResponse \ "context" \ "sessionId").as[String]
+            val incompleteParams      = Map("sessionId" -> sessionId)
             val incompleteResponseOpt = apiService.get(RetrieveFlightsIncompleteEndpoint, incompleteParams)
 
             fetchIncompleteFlights(incompleteResponseOpt) ++ mapItinerariesToFlights(itineraries)
-          }
-          case _ =>
+          case _            =>
             logger.warn(s"Unknown status: $status")
             Nil
         }
-      }
-      case None =>
+      case None               =>
         logger.warn("No JSON response")
         Nil
     }
   }
 
   private def mapItinerariesToFlights(itineraries: List[JsValue]) = {
-      itineraries
-        .map(itinerary => ((itinerary \ "legs").as[List[JsValue]], (itinerary \ "price" \ "raw").as[Double]))
-        .filter { case (legs, _) => legs.length == 1 }
-        .map { case (legs, price) => (legs.head, price) }
-        .map { case (leg, price) => ((leg \ "segments").as[List[JsValue]], price) }
-        .filter { case (segments, _) => segments.length == 1 }
-        .map { case (segments, price) => (segments.head, price) }
-        .map { case (segment, price) => segment.as[Flight].copy(price = price) }
+    itineraries
+      .map(itinerary => ((itinerary \ "legs").as[List[JsValue]], (itinerary \ "price" \ "raw").as[Double]))
+      .filter { case (legs, _) => legs.length == 1 }
+      .map { case (legs, price) => (legs.head, price) }
+      .map { case (leg, price) => ((leg \ "segments").as[List[JsValue]], price) }
+      .filter { case (segments, _) => segments.length == 1 }
+      .map { case (segments, price) => (segments.head, price) }
+      .map { case (segment, price) => segment.as[Flight].copy(price = price) }
   }
 }
 
