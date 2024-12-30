@@ -17,9 +17,9 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
     logger.info(s"Creating trips from $fromCode on $date")
 
     val outboundAirport     = airportService.getAirportByCode(fromCode)
-    val destinationAirports = airportService.getAllAirportsInADifferentCountry(outboundAirport.country)
+    val destAirportdestinationAirportsdes = airportService.getAllAirportsInADifferentCountry(outboundAirport.country)
 
-    val tripsFutures = destinationAirports.map { inboundAirport =>
+    val tripsFutures = destAirportdestinationAirportsdes.map { inboundAirport =>
       val outboundFlightsFuture = Future {
         flightService.getFlights(outboundAirport, inboundAirport, date)
       }
