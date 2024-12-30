@@ -9,7 +9,7 @@ object Airport {
   implicit val airportWrites: Writes[Airport] = (
     (JsPath \ "code").write[String] and
       (JsPath \ "name").write[String]
-    )(airport => (airport.code, airport.name))
+  )(airport => (airport.code, airport.name))
 
   implicit val reads: Reads[Airport] = (
     (JsPath \ "iata_code").read[String] and
@@ -17,5 +17,5 @@ object Airport {
       (JsPath \ "skyId").read[String] and
       (JsPath \ "entityId").read[String] and
       (JsPath \ "country").read[String]
-    )(Airport.apply _)
+  )(Airport.apply _)
 }

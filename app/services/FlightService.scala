@@ -10,16 +10,16 @@ import java.time.format.DateTimeFormatter
 class FlightService(apiService: ApiService) {
   def getFlights(from: Airport, to: Airport, date: LocalDate): List[Flight] = {
     val params = Map(
-      "originSkyId" -> from.skyId,
-      "destinationSkyId" -> to.skyId,
-      "originEntityId" -> from.entity,
+      "originSkyId"         -> from.skyId,
+      "destinationSkyId"    -> to.skyId,
+      "originEntityId"      -> from.entity,
       "destinationEntityId" -> to.entity,
-      "date" -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+      "date"                -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)
     )
 
     var jsonResponseOpt = apiService.get(RetrieveFlightsEndpoint, params)
-    var status = jsonResponseOpt.flatMap(json => (json \ "context" \ "status").asOpt[String]).getOrElse("complete")
-    val responses = scala.collection.mutable.ListBuffer[JsValue]()
+    var status          = jsonResponseOpt.flatMap(json => (json \ "context" \ "status").asOpt[String]).getOrElse("complete")
+    val responses       = scala.collection.mutable.ListBuffer[JsValue]()
 
     jsonResponseOpt.foreach(responses += _)
 
@@ -31,7 +31,7 @@ class FlightService(apiService: ApiService) {
           jsonResponseOpt = apiService.get(RetrieveFlightsIncompleteEndpoint, incompleteParams)
           status = jsonResponseOpt.flatMap(json => (json \ "status").asOpt[String]).getOrElse("complete")
           jsonResponseOpt.foreach(responses += _)
-        case None =>
+        case None            =>
           status = "complete"
       }
     }
@@ -50,12 +50,12 @@ class FlightService(apiService: ApiService) {
           .filter { case (segments, _) => segments.length == 1 }
           .map { case (segments, price) => (segments.head, price) }
           .map { case (segment, price) => segment.as[Flight].copy(price = price) }
-      case None => List.empty[Flight]
+      case None              => List.empty[Flight]
     }
   }
 }
 
 object FlightService {
-  val RetrieveFlightsEndpoint = "/retrieveFlights"
+  val RetrieveFlightsEndpoint           = "/retrieveFlights"
   val RetrieveFlightsIncompleteEndpoint = "/retrieveFlightsIncomplete"
 }
