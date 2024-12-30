@@ -10,11 +10,11 @@ import model.{Airport, Flight, Trip}
 import java.time.{LocalDate, LocalDateTime}
 
 class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
-  val londonGatwickFromCode = "LGW"
+  val londonGatwickFromCode  = "LGW"
   val londonHeathrowFromCode = "LHR"
-  val londonGatwickAirport  = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France")
-  val londonHeathrowAirport = Airport("LHR", "London Heathrow", "LHR", "95565041", "United Kingdom")
-  val parisOrlyAirport      = Airport("ORY", "Paris Orly", "ORY", "95565040", "France")
+  val londonGatwickAirport   = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France")
+  val londonHeathrowAirport  = Airport("LHR", "London Heathrow", "LHR", "95565041", "United Kingdom")
+  val parisOrlyAirport       = Airport("ORY", "Paris Orly", "ORY", "95565040", "France")
 
   val flightService  = mock[FlightService]
   val airportService = mock[AirportService]
@@ -173,7 +173,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
   }
 
   it should "throw an exception for empty airport code" in {
-    when(airportService.getAirportsByCode(List(""))).thenThrow(new NoSuchElementException("Airport with code not found"))
+    when(airportService.getAirportsByCode(List("")))
+      .thenThrow(new NoSuchElementException("Airport with code not found"))
 
     an[NoSuchElementException] should be thrownBy {
       tripCreator.create("", date, numberOfDays)
