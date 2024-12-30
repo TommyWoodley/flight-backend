@@ -11,7 +11,8 @@ class CachingApiService(delegate: ApiService)(implicit config: Configuration) ex
   private val duration: Long = config.get[Long]("cache.expiry.duration")
   private val unit: TimeUnit = TimeUnit.valueOf(config.get[String]("cache.expiry.unit"))
 
-  private val cache: LoadingCache[(String, Map[String, String]), Option[JsValue]] = CacheBuilder.newBuilder()
+  private val cache: LoadingCache[(String, Map[String, String]), Option[JsValue]] = CacheBuilder
+    .newBuilder()
     .expireAfterWrite(duration, unit)
     .build(new CacheLoader[(String, Map[String, String]), Option[JsValue]]() {
       override def load(key: (String, Map[String, String])): Option[JsValue] = {

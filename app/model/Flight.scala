@@ -6,15 +6,21 @@ import play.api.libs.json.{JsPath, Json, Reads, Writes}
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-case class Flight(flightNumber: String, airline: String, departure: Airport, arrival: Airport,
-                  departureTime: LocalDateTime, arrivalTime: LocalDateTime, price: Double = 0.0)
+case class Flight(
+                   flightNumber: String,
+                   airline: String,
+                   departure: Airport,
+                   arrival: Airport,
+                   departureTime: LocalDateTime,
+                   arrivalTime: LocalDateTime,
+                   price: Double = 0.0
+                 )
 
 object Flight {
   implicit val flightWrites: Writes[Flight] = Json.writes[Flight]
   implicit val localDateTimeReads: Reads[LocalDateTime] = Reads[LocalDateTime](js =>
-    js.validate[String].map[LocalDateTime](dtString =>
-      LocalDateTime.parse(dtString, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-    )
+    js.validate[String]
+      .map[LocalDateTime](dtString => LocalDateTime.parse(dtString, DateTimeFormatter.ISO_LOCAL_DATE_TIME))
   )
 
   implicit val airportReads: Reads[Airport] = (

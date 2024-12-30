@@ -16,6 +16,7 @@ libraryDependencies ++= Seq(
   "org.mockito" %% "mockito-scala" % "1.16.42" % Test
 )
 
+ThisBuild / scalafmtOnCompile := true
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "com.example.controllers._"
