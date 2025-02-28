@@ -13,8 +13,8 @@ import javax.inject._
 @Singleton
 class ApiController @Inject() (val controllerComponents: ControllerComponents, implicit val config: Configuration)
     extends BaseController {
-  private val airportService = new AirportService
-  private val tripCreator    =
+  protected val airportService = new AirportService
+  protected val tripCreator    =
     new TripCreator(new FlightService(new CachingApiService(new HttpApiService)), airportService)
 
   def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
@@ -28,7 +28,7 @@ class ApiController @Inject() (val controllerComponents: ControllerComponents, i
         try {
           val date         = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE)
           val numberOfDays = numberOfDaysStr.toInt
-          val fromCodes    = fromCodeStr.split(",").toList
+          val fromCodes    = if (fromCodeStr.isEmpty) List.empty else fromCodeStr.split(",").toList
 
           val trips        = tripCreator.create(fromCodes, date, numberOfDays)
           val jsonResponse = Json.toJson(trips)
@@ -36,6 +36,10 @@ class ApiController @Inject() (val controllerComponents: ControllerComponents, i
         } catch {
           case _: DateTimeParseException =>
             BadRequest("Invalid date format. Please use ISO_LOCAL_DATE format (yyyy-MM-dd).")
+          case _: NumberFormatException  =>
+            BadRequest("Invalid number format for numberOfDays parameter.")
+          case e: Exception              =>
+            BadRequest(e.getMessage)
         }
 
       case _ =>
