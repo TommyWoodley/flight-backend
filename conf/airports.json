@@ -4,76 +4,98 @@
     "iata_code": "AMS",
     "skyId": "AMS",
     "entityId": "95565044",
-    "country": "Netherlands"
+    "country": "Netherlands",
+    "latitude": 52.3086,
+    "longitude": 4.7639
   },
   {
     "name": "Athens International",
     "iata_code": "ATH",
     "skyId": "ATH",
     "entityId": "95673624",
-    "country": "Greece"
+    "country": "Greece",
+    "latitude": 37.9364,
+    "longitude": 23.9445
   },
   {
     "name": "Belgrade Nikola Tesla",
     "iata_code": "BEG",
     "skyId": "BEG",
     "entityId": "95673488",
-    "country": "Serbia"
+    "country": "Serbia",
+    "latitude": 44.8184,
+    "longitude": 20.3090
   },
   {
     "name": "Berlin Brandenburg",
     "iata_code": "BER",
     "skyId": "BER",
     "entityId": "95673383",
-    "country": "Germany"
+    "country": "Germany",
+    "latitude": 52.3667,
+    "longitude": 13.5033
   },
   {
     "name": "London City Airport",
     "iata_code": "LCY",
     "skyId": "LCY",
     "entityId": "95565047",
-    "country": "United Kingdom"
+    "country": "United Kingdom",
+    "latitude": 51.5048,
+    "longitude": 0.0495
   },
   {
     "name": "London Gatwick Airport",
     "iata_code": "LGW",
     "skyId": "LGW",
     "entityId": "95565051",
-    "country": "United Kingdom"
+    "country": "United Kingdom",
+    "latitude": 51.1537,
+    "longitude": -0.1821
   },
   {
     "name": "London Heathrow Airport",
     "iata_code": "LHR",
     "skyId": "LHR",
     "entityId": "95565050",
-    "country": "United Kingdom"
+    "country": "United Kingdom",
+    "latitude": 51.4700,
+    "longitude": -0.4543
   },
   {
     "name": "London Stansted Airport",
     "iata_code": "STN",
     "skyId": "STN",
     "entityId": "95565052",
-    "country": "United Kingdom"
+    "country": "United Kingdom",
+    "latitude": 51.8860,
+    "longitude": 0.2389
   },
   {
     "name": "Luton Airport",
     "iata_code": "LTN",
     "skyId": "LTN",
     "entityId": "95565053",
-    "country": "United Kingdom"
+    "country": "United Kingdom",
+    "latitude": 51.8747,
+    "longitude": -0.3683
   },
   {
     "name": "Paris Charles de Gaulle",
     "iata_code": "CDG",
     "skyId": "CDG",
     "entityId": "95565041",
-    "country": "France"
+    "country": "France",
+    "latitude": 49.0097,
+    "longitude": 2.5479
   },
   {
     "name": "Paris Orly",
     "iata_code": "ORY",
     "skyId": "ORY",
     "entityId": "95565040",
-    "country": "France"
+    "country": "France",
+    "latitude": 48.7262,
+    "longitude": 2.3652
   }
 ]

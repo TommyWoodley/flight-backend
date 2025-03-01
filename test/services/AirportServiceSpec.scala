@@ -16,14 +16,16 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
       "London City Airport",
       "LCY",
       "95565047",
-      "United Kingdom"
+      "United Kingdom",
+      51.5048,
+      0.0495
     ),
-    Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom"),
-    Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom"),
-    Airport("STN", "London Stansted Airport", "STN", "95565052", "United Kingdom"),
-    Airport("LTN", "Luton Airport", "LTN", "95565053", "United Kingdom"),
-    Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France"),
-    Airport("ORY", "Paris Orly", "ORY", "95565040", "France"))
+    Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom", 51.1537, -0.1821),
+    Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom", 51.4700, -0.4543),
+    Airport("STN", "London Stansted Airport", "STN", "95565052", "United Kingdom", 51.8860, 0.2389),
+    Airport("LTN", "Luton Airport", "LTN", "95565053", "United Kingdom", 51.8747, -0.3683),
+    Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479),
+    Airport("ORY", "Paris Orly", "ORY", "95565040", "France", 48.7262, 2.3652))
   }
 
   it should "return SkyId and EntityId for a given iata code" in {
@@ -41,18 +43,20 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
     val airportService = new AirportService()
 
     airportService.getAirportByCode("LCY") must be(
-      Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom")
+      Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom", 51.5048, 0.0495)
     )
     airportService.getAirportByCode("LGW") must be(
-      Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom")
+      Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom", 51.1537, -0.1821)
     )
     airportService.getAirportByCode("LHR") must be(
-      Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom")
+      Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom", 51.4700, -0.4543)
     )
     airportService.getAirportByCode("STN") must be(
-      Airport("STN", "London Stansted Airport", "STN", "95565052", "United Kingdom")
+      Airport("STN", "London Stansted Airport", "STN", "95565052", "United Kingdom", 51.8860, 0.2389)
     )
-    airportService.getAirportByCode("LTN") must be(Airport("LTN", "Luton Airport", "LTN", "95565053", "United Kingdom"))
+    airportService.getAirportByCode("LTN") must be(
+      Airport("LTN", "Luton Airport", "LTN", "95565053", "United Kingdom", 51.8747, -0.3683)
+    )
   }
 
   it should "return all airports in a different country" in {
@@ -60,8 +64,8 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
 
     val result = airportService.getAllAirportsInADifferentCountry("United Kingdom")
     result must contain allOf (
-      Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France"),
-      Airport("ORY", "Paris Orly", "ORY", "95565040", "France")
+      Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479),
+      Airport("ORY", "Paris Orly", "ORY", "95565040", "France", 48.7262, 2.3652)
     )
   }
 
@@ -70,9 +74,9 @@ class AirportServiceSpec extends AnyFlatSpec with Matchers {
 
     val result = airportService.getAirportsByCode(List("LCY", "LGW", "LHR"))
     result must contain allOf (
-      Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom"),
-      Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom"),
-      Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom")
+      Airport("LCY", "London City Airport", "LCY", "95565047", "United Kingdom", 51.5048, 0.0495),
+      Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom", 51.1537, -0.1821),
+      Airport("LHR", "London Heathrow Airport", "LHR", "95565050", "United Kingdom", 51.4700, -0.4543)
     )
   }
 

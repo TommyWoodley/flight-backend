@@ -11,8 +11,8 @@ import java.time.LocalDate
 import scala.io.Source
 
 class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
-  val from: Airport = Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom")
-  val to: Airport   = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France")
+  val from: Airport = Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom", 51.1537, -0.1821)
+  val to: Airport   = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479)
 
   "FlightService" should "call the correct endpoint to retrieve flights" in {
     // Arrange

@@ -30,8 +30,8 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
 
   // Test data
   private val testDate   = LocalDate.parse("2025-01-18")
-  private val lhrAirport = Airport("LHR", "London Heathrow", "GB", "12345", "67890")
-  private val cdgAirport = Airport("CDG", "Paris Charles de Gaulle", "FR", "54321", "09876")
+  private val lhrAirport = Airport("LHR", "London Heathrow", "GB", "12345", "67890", 51.4700, -0.4543)
+  private val cdgAirport = Airport("CDG", "Paris Charles de Gaulle", "FR", "54321", "09876", 49.0097, 2.5479)
 
   private val outboundFlight = Flight(
     "FL123",

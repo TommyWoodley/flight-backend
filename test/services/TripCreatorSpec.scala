@@ -12,9 +12,9 @@ import java.time.{LocalDate, LocalDateTime}
 class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
   val londonGatwickFromCode  = "LGW"
   val londonHeathrowFromCode = "LHR"
-  val londonGatwickAirport   = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France")
-  val londonHeathrowAirport  = Airport("LHR", "London Heathrow", "LHR", "95565041", "United Kingdom")
-  val parisOrlyAirport       = Airport("ORY", "Paris Orly", "ORY", "95565040", "France")
+  val londonGatwickAirport   = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479)
+  val londonHeathrowAirport  = Airport("LHR", "London Heathrow", "LHR", "95565041", "United Kingdom", 51.4700, -0.4543)
+  val parisOrlyAirport       = Airport("ORY", "Paris Orly", "ORY", "95565040", "France", 48.7262, 2.3652)
 
   val flightService  = mock[FlightService]
   val airportService = mock[AirportService]
@@ -71,8 +71,9 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
   }
 
   it should "create trips from multiple destination airports" in {
-    val parisCharlesDeGaulleAirport = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France")
-    val berlinTegelAirport          = Airport("TXL", "Berlin Tegel", "TXL", "95565042", "Germany")
+    val parisCharlesDeGaulleAirport =
+      Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479)
+    val berlinTegelAirport          = Airport("TXL", "Berlin Tegel", "TXL", "95565042", "Germany", 52.5588, 13.2884)
 
     when(airportService.getAirportsByCode(List(londonGatwickFromCode))).thenReturn(List(londonGatwickAirport))
     when(airportService.getAllAirportsInADifferentCountry(londonGatwickAirport.country))
@@ -215,8 +216,9 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
   }
 
   it should "create only one trip per destination with the cheapest price per hour option and sort trips by total price" in {
-    val parisCharlesDeGaulleAirport = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France")
-    val berlinTegelAirport          = Airport("TXL", "Berlin Tegel", "TXL", "95565042", "Germany")
+    val parisCharlesDeGaulleAirport =
+      Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479)
+    val berlinTegelAirport          = Airport("TXL", "Berlin Tegel", "TXL", "95565042", "Germany", 52.5588, 13.2884)
 
     when(airportService.getAirportByCode(londonGatwickFromCode)).thenReturn(londonGatwickAirport)
     when(airportService.getAllAirportsInADifferentCountry(londonGatwickAirport.country))

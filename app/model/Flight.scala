@@ -28,7 +28,9 @@ object Flight {
       (JsPath \ "name").read[String] and
       (JsPath \ "flightPlaceId").read[String] and
       Reads.pure("") and
-      (JsPath \ "country").read[String]
+      (JsPath \ "country").read[String] and
+      Reads.pure(0.0) and
+      Reads.pure(0.0)
   )(Airport.apply _)
 
   implicit val flightReads: Reads[Flight] = (
