@@ -19,7 +19,8 @@ class FlightService(apiService: ApiService) {
       "destinationSkyId"    -> to.skyId,
       "originEntityId"      -> from.entity,
       "destinationEntityId" -> to.entity,
-      "date"                -> date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+      "date"                -> date.format(DateTimeFormatter.ISO_LOCAL_DATE),
+      "currency"            -> "GBP"
     )
 
     var jsonResponseOpt = apiService.get(RetrieveFlightsEndpoint, params)
