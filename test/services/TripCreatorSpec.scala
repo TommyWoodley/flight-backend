@@ -12,9 +12,10 @@ import java.time.{LocalDate, LocalDateTime}
 class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
   val londonGatwickFromCode  = "LGW"
   val londonHeathrowFromCode = "LHR"
-  val londonGatwickAirport   = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565041", "France", 49.0097, 2.5479)
+  val londonGatwickAirport   =
+    Airport("LGW", "London Gatwick Airport", "LGW", "95565051", "United Kingdom", 51.1537, -0.1821)
   val londonHeathrowAirport  = Airport("LHR", "London Heathrow", "LHR", "95565041", "United Kingdom", 51.4700, -0.4543)
-  val parisOrlyAirport       = Airport("ORY", "Paris Orly", "ORY", "95565040", "France", 48.7262, 2.3652)
+  val parisOrlyAirport       = Airport("CDG", "Paris Charles de Gaulle", "CDG", "95565040", "France", 49.0097, 2.5479)
 
   val flightService  = mock[FlightService]
   val airportService = mock[AirportService]
@@ -31,8 +32,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight1 = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisOrlyAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -40,8 +41,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight1  = Flight(
       "flight345",
       "AB Airlines",
-      parisOrlyAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 18, 0),
       LocalDateTime.of(2025, 1, 20, 20, 0),
       100
@@ -82,8 +83,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight1 = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisCharlesDeGaulleAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -91,8 +92,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight1  = Flight(
       "flight345",
       "AB Airlines",
-      parisCharlesDeGaulleAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 18, 0),
       LocalDateTime.of(2025, 1, 20, 20, 0),
       100
@@ -100,8 +101,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight2 = Flight(
       "flight456",
       "SpeedyJet",
-      londonGatwickAirport,
-      berlinTegelAirport,
+      "LGW",
+      "TXL",
       LocalDateTime.of(2025, 1, 18, 9, 0),
       LocalDateTime.of(2025, 1, 18, 11, 0),
       150
@@ -109,8 +110,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight2  = Flight(
       "flight678",
       "AB Airlines",
-      berlinTegelAirport,
-      londonGatwickAirport,
+      "TXL",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 19, 0),
       LocalDateTime.of(2025, 1, 20, 21, 0),
       150
@@ -139,8 +140,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisOrlyAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -148,8 +149,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight  = Flight(
       "flight345",
       "AB Airlines",
-      parisOrlyAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 18, 9, 0),
       LocalDateTime.of(2025, 1, 18, 11, 0),
       100
@@ -190,8 +191,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisOrlyAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -199,8 +200,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight  = Flight(
       "flight345",
       "AB Airlines",
-      parisOrlyAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 18, 10, 0),
       LocalDateTime.of(2025, 1, 18, 12, 0),
       100
@@ -227,8 +228,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight1 = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisCharlesDeGaulleAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -236,8 +237,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight1  = Flight(
       "flight345",
       "AB Airlines",
-      parisCharlesDeGaulleAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 18, 0),
       LocalDateTime.of(2025, 1, 20, 20, 0),
       100
@@ -245,8 +246,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight2 = Flight(
       "flight456",
       "SpeedyJet",
-      londonGatwickAirport,
-      berlinTegelAirport,
+      "LGW",
+      "TXL",
       LocalDateTime.of(2025, 1, 18, 9, 0),
       LocalDateTime.of(2025, 1, 18, 11, 0),
       150
@@ -254,8 +255,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight2  = Flight(
       "flight678",
       "AB Airlines",
-      berlinTegelAirport,
-      londonGatwickAirport,
+      "TXL",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 19, 0),
       LocalDateTime.of(2025, 1, 20, 21, 0),
       150
@@ -263,8 +264,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight3 = Flight(
       "flight789",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisCharlesDeGaulleAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 7, 0),
       LocalDateTime.of(2025, 1, 18, 9, 0),
       80
@@ -272,8 +273,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight3  = Flight(
       "flight910",
       "AB Airlines",
-      parisCharlesDeGaulleAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 17, 0),
       LocalDateTime.of(2025, 1, 20, 19, 0),
       80
@@ -304,8 +305,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight1 = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisOrlyAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -313,8 +314,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight1  = Flight(
       "flight345",
       "AB Airlines",
-      parisOrlyAirport,
-      londonGatwickAirport,
+      "CDG",
+      "LGW",
       LocalDateTime.of(2025, 1, 20, 18, 0),
       LocalDateTime.of(2025, 1, 20, 20, 0),
       100
@@ -322,8 +323,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight2 = Flight(
       "flight456",
       "SpeedyJet",
-      londonHeathrowAirport,
-      parisOrlyAirport,
+      "LHR",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 9, 0),
       LocalDateTime.of(2025, 1, 18, 11, 0),
       150
@@ -331,8 +332,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight2  = Flight(
       "flight678",
       "AB Airlines",
-      parisOrlyAirport,
-      londonHeathrowAirport,
+      "CDG",
+      "LHR",
       LocalDateTime.of(2025, 1, 20, 19, 0),
       LocalDateTime.of(2025, 1, 20, 21, 0),
       150
@@ -360,8 +361,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val outboundFlight = Flight(
       "flight123",
       "SpeedyJet",
-      londonGatwickAirport,
-      parisOrlyAirport,
+      "LGW",
+      "CDG",
       LocalDateTime.of(2025, 1, 18, 8, 0),
       LocalDateTime.of(2025, 1, 18, 10, 0),
       100
@@ -369,8 +370,8 @@ class TripCreatorSpec extends AnyFlatSpec with Matchers with MockitoSugar {
     val inboundFlight  = Flight(
       "flight345",
       "AB Airlines",
-      parisOrlyAirport,
-      londonHeathrowAirport,
+      "CDG",
+      "LHR",
       LocalDateTime.of(2025, 1, 20, 18, 0),
       LocalDateTime.of(2025, 1, 20, 20, 0),
       80

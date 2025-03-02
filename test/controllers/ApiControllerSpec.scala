@@ -36,8 +36,8 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
   private val outboundFlight = Flight(
     "FL123",
     "British Airways",
-    lhrAirport,
-    cdgAirport,
+    "LHR",
+    "CDG",
     LocalDateTime.parse("2025-01-18T10:00:00"),
     LocalDateTime.parse("2025-01-18T12:00:00"),
     100.0
@@ -46,8 +46,8 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
   private val inboundFlight = Flight(
     "FL124",
     "Air France",
-    cdgAirport,
-    lhrAirport,
+    "CDG",
+    "LHR",
     LocalDateTime.parse("2025-01-20T14:00:00"),
     LocalDateTime.parse("2025-01-20T16:00:00"),
     120.0

@@ -9,8 +9,8 @@ import java.time.format.DateTimeFormatter
 case class Flight(
     flightNumber: String,
     airline: String,
-    departure: Airport,
-    arrival: Airport,
+    departureCode: String,
+    arrivalCode: String,
     departureTime: LocalDateTime,
     arrivalTime: LocalDateTime,
     price: Double = 0.0
@@ -23,21 +23,11 @@ object Flight {
       .map[LocalDateTime](dtString => LocalDateTime.parse(dtString, DateTimeFormatter.ISO_LOCAL_DATE_TIME))
   )
 
-  implicit val airportReads: Reads[Airport] = (
-    (JsPath \ "displayCode").read[String] and
-      (JsPath \ "name").read[String] and
-      (JsPath \ "flightPlaceId").read[String] and
-      Reads.pure("") and
-      (JsPath \ "country").read[String] and
-      Reads.pure(0.0) and
-      Reads.pure(0.0)
-  )(Airport.apply _)
-
   implicit val flightReads: Reads[Flight] = (
     (JsPath \ "flightNumber").read[String] and
       (JsPath \ "marketingCarrier" \ "name").read[String] and
-      (JsPath \ "origin").read[Airport] and
-      (JsPath \ "destination").read[Airport] and
+      (JsPath \ "origin" \ "displayCode").read[String] and
+      (JsPath \ "destination" \ "displayCode").read[String] and
       (JsPath \ "departure").read[LocalDateTime] and
       (JsPath \ "arrival").read[LocalDateTime] and
       Reads.pure(0.0)

@@ -42,7 +42,7 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
       outboundAirports: List[Airport],
       destinationAirports: List[Airport],
       departureDate: LocalDate
-  ) = {
+  ): List[Trip] = {
     val outboundFlightsFutures = createFlightFutures(outboundDate, outboundAirports, destinationAirports)
 
     val inboundFlightsFutures = createFlightFutures(departureDate, destinationAirports, outboundAirports)
@@ -55,10 +55,11 @@ class TripCreator(flightService: FlightService, airportService: AirportService) 
       val inboundFlights  = inboundFlightsLists.flatten
 
       for {
-        outbound <- outboundFlights
-        inbound  <- inboundFlights
-        if outbound.arrival == inbound.departure && inbound.departureTime.isAfter(outbound.arrivalTime)
-      } yield Trip(inbound.departure.country, outbound, inbound)
+        outbound          <- outboundFlights
+        inbound           <- inboundFlights
+        if outbound.arrivalCode == inbound.departureCode && inbound.departureTime.isAfter(outbound.arrivalTime)
+        destinationAirport = destinationAirports.find(_.code == outbound.arrivalCode).get
+      } yield Trip(destinationAirport.country, outbound, inbound)
     }
 
     val trips = Await.result(tripsFuture, 60.seconds)
