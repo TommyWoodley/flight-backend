@@ -25,7 +25,8 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
       "destinationSkyId"    -> "CDG",
       "originEntityId"      -> "95565051",
       "destinationEntityId" -> "95565041",
-      "date"                -> "2024-12-13"
+      "date"                -> "2024-12-13",
+      "currency"            -> "GBP"
     )
 
     // Load the completeFlightsJson from the file
@@ -58,7 +59,8 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
       "destinationSkyId"    -> "CDG",
       "originEntityId"      -> "95565051",
       "destinationEntityId" -> "95565041",
-      "date"                -> "2024-12-13"
+      "date"                -> "2024-12-13",
+      "currency"            -> "GBP"
     )
     val sessionId          =
       "Cl0IARJZCk4KJGM2YTE1NWU2LTFlYzMtNDk1Mi1iNGE0LWZjMGQ1Y2Y4MDYxZRACGiRlNzM1NzQwZS0yYjQ1LTRkNGUtYWY2NS1hOTQxNzRlZjI1OTgQh_nLuboyGAESKHVzc19lMjViN2QwZi1mYjJjLTQxODEtYTAzZC00YmYxMzYyOTk5NGU="
@@ -101,7 +103,8 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
       "destinationSkyId"    -> "CDG",
       "originEntityId"      -> "95565051",
       "destinationEntityId" -> "95565041",
-      "date"                -> "2024-12-13"
+      "date"                -> "2024-12-13",
+      "currency"            -> "GBP"
     )
 
     // Load the completeFlightsJson from the file
@@ -134,7 +137,8 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
       "destinationSkyId"    -> "CDG",
       "originEntityId"      -> "95565051",
       "destinationEntityId" -> "95565041",
-      "date"                -> "2024-12-13"
+      "date"                -> "2024-12-13",
+      "currency"            -> "GBP"
     )
 
     // Configure the mock to return None
@@ -160,7 +164,8 @@ class FlightServiceSpec extends AnyFlatSpec with Matchers with MockitoSugar {
       "destinationSkyId"    -> "CDG",
       "originEntityId"      -> "95565051",
       "destinationEntityId" -> "95565041",
-      "date"                -> "2024-12-13"
+      "date"                -> "2024-12-13",
+      "currency"            -> "GBP"
     )
     val sessionId          =
       "Cl0IARJZCk4KJGM2YTE1NWU2LTFlYzMtNDk1Mi1iNGE0LWZjMGQ1Y2Y4MDYxZRACGiRlNzM1NzQwZS0yYjQ1LTRkNGUtYWY2NS1hOTQxNzRlZjI1OTgQh_nLuboyGAESKHVzc19lMjViN2QwZi1mYjJjLTQxODEtYTAzZC00YmYxMzYyOTk5NGU="
