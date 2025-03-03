@@ -3,8 +3,9 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
-# Main API Endpoint
-GET        /api/trips        controllers.ApiController.getApiData
+# Trip API Endpoints
+GET        /api/trips        controllers.ApiController.getTrips
+GET        /api/weekends     controllers.ApiController.getWeekends
 
 # Airport routes
 GET     /api/airports     controllers.AirportController.getAllAirports()

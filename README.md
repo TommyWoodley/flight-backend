@@ -51,8 +51,8 @@ sbt test
 
 ### Endpoints
 
-#### Get Trip Recommendations
-Retrieves trip recommendations based on departure airports, date, and duration.
+#### 1. Get Specific Date Trips
+Retrieves trip recommendations for specific dates.
 
 **Endpoint:** `GET /trips`
 
@@ -62,13 +62,51 @@ Retrieves trip recommendations based on departure airports, date, and duration.
 | fromCode | string | Yes | Comma-separated list of departure airport IATA codes (e.g., "LHR" or "LHR,LGW") |
 | date | string | Yes | Departure date in ISO_LOCAL_DATE format (YYYY-MM-DD) |
 | numberOfDays | integer | Yes | Duration of the trip in days |
-| destinationCountries | string | No | Filter for specific destination countries |
 
-##### Response Format
+##### Example Requests
+
+1. Single departure airport:
+```
+GET /api/trips?fromCode=LHR&date=2025-01-18&numberOfDays=2
+```
+
+2. Multiple departure airports:
+```
+GET /api/trips?fromCode=LHR,LGW&date=2025-01-18&numberOfDays=2
+```
+
+#### 2. Get Weekend Trips
+Retrieves trip recommendations for weekends in a specific month.
+
+**Endpoint:** `GET /weekends`
+
+##### Query Parameters
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| fromCode | string | Yes | Comma-separated list of departure airport IATA codes (e.g., "LHR" or "LHR,LGW") |
+| month | integer | Yes | Month number (1-12) |
+| year | integer | Yes | Year (e.g., 2024) |
+| numberOfExtraDays | integer | Yes | Number of additional days to add to the weekend (0-2) |
+
+##### Example Requests
+
+1. Basic weekend trips:
+```
+GET /api/weekends?fromCode=LHR&month=6&year=2024&numberOfExtraDays=0
+```
+
+2. Extended weekend with multiple airports:
+```
+GET /api/weekends?fromCode=LHR,LGW&month=6&year=2024&numberOfExtraDays=1
+```
+
+#### Common Response Format
+Both endpoints return the same response format:
+
 ```json
 [
   {
-    "destination": "string",      // Destination airport code (e.g., "CDG")
+    "destination": "string",      // Destination country (e.g., "France")
     "outboundFlight": {
       "flightNumber": "string",   // Flight number (e.g., "FL123")
       "airline": "string",        // Airline name
@@ -93,33 +131,22 @@ Retrieves trip recommendations based on departure airports, date, and duration.
 ]
 ```
 
-##### Response Codes
+#### Response Codes
 | Status Code | Description |
 |-------------|-------------|
 | 200 | Success. Returns array of trip recommendations |
-| 400 | Bad Request. Returned when: |
+| 400 | Bad Request. Common error cases: |
 |     | - Missing required parameters |
 |     | - Invalid date format (must be YYYY-MM-DD) |
-|     | - Invalid number format for numberOfDays |
-|     | - Other validation errors |
-
-##### Example Requests
-
-1. Single departure airport:
-```
-GET /api/trips?fromCode=LHR&date=2025-01-18&numberOfDays=2
-```
-
-2. Multiple departure airports:
-```
-GET /api/trips?fromCode=LHR,LGW&date=2025-01-18&numberOfDays=2
-```
+|     | - Invalid month (must be 1-12) |
+|     | - Invalid number of extra days (must be 0-2) |
+|     | - Invalid number format |
 
 ##### Example Response
 ```json
 [
   {
-    "destination": "CDG",
+    "destination": "France",
     "outboundFlight": {
       "flightNumber": "FL123",
       "airline": "British Airways",
@@ -171,6 +198,8 @@ GET /api/trips?fromCode=LHR,LGW&date=2025-01-18&numberOfDays=2
 - Empty `fromCode` will return an empty array of trips
 - All times are in ISO DateTime format
 - Prices are in the default currency unit (assumed to be in the same currency throughout)
+- Weekend trips are automatically calculated for all weekends in the specified month
+- For weekend trips, the best (cheapest) options are returned for each destination
 - The API requires proper configuration including cache settings
 
 ## Project Structure

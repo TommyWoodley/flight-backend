@@ -18,20 +18,16 @@ class ApiController @Inject() (val controllerComponents: ControllerComponents, i
   protected val tripCreator    =
     new TripCreator(new FlightService(new CachingApiService(new HttpApiService)), airportService)
 
-  def getApiData: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val fromCodeOpt             = request.getQueryString("fromCode")
-    val dateStrOpt              = request.getQueryString("date")
-    val monthStrOpt             = request.getQueryString("month")
-    val yearStrOpt              = request.getQueryString("year")
-    val numberOfDaysStrOpt      = request.getQueryString("numberOfDays")
-    val numberOfExtraDaysStrOpt = request.getQueryString("numberOfExtraDays")
+  def getTrips: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    val fromCodeOpt        = request.getQueryString("fromCode")
+    val dateStrOpt         = request.getQueryString("date")
+    val numberOfDaysStrOpt = request.getQueryString("numberOfDays")
 
     if (fromCodeOpt.isEmpty) {
       BadRequest("Missing required query parameter: fromCode")
     } else {
       val fromCodes = if (fromCodeOpt.get.isEmpty) List.empty else fromCodeOpt.get.split(",").toList
 
-      // Case 1: Using specific date and numberOfDays
       if (dateStrOpt.isDefined && numberOfDaysStrOpt.isDefined) {
         try {
           val date         = LocalDate.parse(dateStrOpt.get, DateTimeFormatter.ISO_LOCAL_DATE)
@@ -46,9 +42,24 @@ class ApiController @Inject() (val controllerComponents: ControllerComponents, i
           case e: Exception              =>
             BadRequest(e.getMessage)
         }
+      } else {
+        BadRequest("Must provide both date and numberOfDays parameters")
       }
-      // Case 2: Using month, year and numberOfExtraDays
-      else if (monthStrOpt.isDefined && yearStrOpt.isDefined && numberOfExtraDaysStrOpt.isDefined) {
+    }
+  }
+
+  def getWeekends: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    val fromCodeOpt             = request.getQueryString("fromCode")
+    val monthStrOpt             = request.getQueryString("month")
+    val yearStrOpt              = request.getQueryString("year")
+    val numberOfExtraDaysStrOpt = request.getQueryString("numberOfExtraDays")
+
+    if (fromCodeOpt.isEmpty) {
+      BadRequest("Missing required query parameter: fromCode")
+    } else {
+      val fromCodes = if (fromCodeOpt.get.isEmpty) List.empty else fromCodeOpt.get.split(",").toList
+
+      if (monthStrOpt.isDefined && yearStrOpt.isDefined && numberOfExtraDaysStrOpt.isDefined) {
         try {
           val month             = monthStrOpt.get.toInt
           val year              = yearStrOpt.get.toInt
@@ -87,7 +98,7 @@ class ApiController @Inject() (val controllerComponents: ControllerComponents, i
             BadRequest(e.getMessage)
         }
       } else {
-        BadRequest("Must provide either (date and numberOfDays) or (month, year, and numberOfExtraDays)")
+        BadRequest("Must provide month, year, and numberOfExtraDays parameters")
       }
     }
   }
