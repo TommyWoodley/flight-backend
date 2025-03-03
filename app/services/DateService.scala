@@ -52,27 +52,4 @@ class DateService {
 
     result.toList
   }
-
-  private def findWeekendInTrip(startDate: LocalDate, additionalDays: Int): Set[LocalDate] = {
-    val endDate = additionalDays match {
-      case 0 => startDate.plusDays(1) // Sunday
-      case 1 => startDate.plusDays(2) // Sunday or Monday
-      case 2 => startDate.plusDays(3) // Sunday, Monday, or Tuesday
-    }
-
-    var currentDate  = startDate
-    val weekendDates = new ListBuffer[LocalDate]()
-
-    while (!currentDate.isAfter(endDate)) {
-      if (
-        currentDate.getDayOfWeek == DayOfWeek.SATURDAY ||
-        currentDate.getDayOfWeek == DayOfWeek.SUNDAY
-      ) {
-        weekendDates += currentDate
-      }
-      currentDate = currentDate.plusDays(1)
-    }
-
-    weekendDates.toSet
-  }
 }
