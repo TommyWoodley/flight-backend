@@ -2,11 +2,14 @@ package services
 
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
-import scalaj.http.Http
+import scalaj.http.{Http, HttpResponse}
+import javax.inject.{Inject, Singleton}
+import play.api.Configuration
 
 import scala.util.{Failure, Success, Try}
 
-class HttpApiService extends ApiService {
+@Singleton
+class HttpApiService @Inject() (config: Configuration) extends ApiService {
   private val logger: Logger           = Logger(this.getClass)
   private val flightLabsApiKey: String = sys.env.getOrElse("FLIGHT_LABS_API", "")
   private val baseUrl: String          = "https://www.goflightlabs.com"
@@ -19,7 +22,7 @@ class HttpApiService extends ApiService {
     logger.info(s"$threadName: Making request to $fullUrl with params $params")
 
     Try {
-      val response = Http(fullUrl)
+      val response: HttpResponse[String] = Http(fullUrl)
         .params(paramsWithKey)
         .timeout(connTimeoutMs = 5000, readTimeoutMs = 20000)
         .asString

@@ -1,22 +1,24 @@
 package controllers
 
-import cache.CachingApiService
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.{AirportService, DateService, FlightService, HttpApiService, TripCreator}
+import services.{AirportService, DateService, FlightService, TripCreator}
 
 import java.time.{LocalDate, Year, YearMonth}
 import java.time.format.{DateTimeFormatter, DateTimeParseException}
 import javax.inject._
 
 @Singleton
-class ApiController @Inject() (val controllerComponents: ControllerComponents, implicit val config: Configuration)
-    extends BaseController {
-  protected val airportService = new AirportService
-  protected val dateService    = new DateService
-  protected val tripCreator    =
-    new TripCreator(new FlightService(new CachingApiService(new HttpApiService)), airportService)
+class ApiController @Inject() (
+    val controllerComponents: ControllerComponents,
+    airportService: AirportService,
+    dateService: DateService,
+    flightService: FlightService,
+    implicit val config: Configuration
+) extends BaseController {
+
+  protected val tripCreator = new TripCreator(flightService, airportService)
 
   def getTrips: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val fromCodeOpt        = request.getQueryString("fromCode")

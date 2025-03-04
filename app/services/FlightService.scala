@@ -9,11 +9,39 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import scala.annotation.tailrec
 import scala.collection.mutable
+import javax.inject.Inject
+import scala.util.{Success, Failure}
 
-class FlightService(apiService: ApiService) {
+class FlightService @Inject() (apiService: ApiService, dynamoDBService: DynamoDBService) {
   private val logger: Logger = Logger(this.getClass)
 
   def getFlights(from: Airport, to: Airport, date: LocalDate): List[Flight] = {
+    logger.info(s"Getting flights for ${from.skyId} to ${to.skyId} on $date")
+    // First try to get flights from the database
+    dynamoDBService.getFlights(from, to, date) match {
+      case Success(flights) if flights.nonEmpty =>
+        logger.info(s"Retrieved ${flights.length} flights from database for ${from.skyId} to ${to.skyId} on $date")
+        flights
+
+      case _ =>
+        // If no flights found in database or error occurred, fetch from API
+        logger.info(s"Fetching flights from API for ${from.skyId} to ${to.skyId} on $date")
+        val flights = fetchFlightsFromApi(from, to, date)
+
+        // Store the flights in the database
+        dynamoDBService.storeFlights(flights, date) match {
+          case Success(_) =>
+            logger.info(s"Stored ${flights.length} flights in database")
+          case Failure(e) =>
+            logger.error(s"Failed to store flights in database: ${e.getMessage}")
+        }
+
+        flights
+    }
+  }
+
+  private def fetchFlightsFromApi(from: Airport, to: Airport, date: LocalDate): List[Flight] = {
+    logger.info(s"Fetching flights from API for ${from.skyId} to ${to.skyId} on $date")
     val params = Map(
       "originSkyId"         -> from.skyId,
       "destinationSkyId"    -> to.skyId,
@@ -24,7 +52,6 @@ class FlightService(apiService: ApiService) {
     )
 
     var jsonResponseOpt = apiService.get(RetrieveFlightsEndpoint, params)
-
     fetchIncompleteFlights(jsonResponseOpt)
   }
 

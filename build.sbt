@@ -15,7 +15,13 @@ libraryDependencies += filters
 libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.2.10" % Test,
   "org.mockito" %% "mockito-scala" % "1.17.30" % Test,
-  "org.mockito" % "mockito-core" % "5.10.0" % Test
+  "org.mockito" % "mockito-core" % "5.10.0" % Test,
+  
+  // AWS SDK v2 for DynamoDB
+  "software.amazon.awssdk" % "dynamodb" % "2.20.162",
+  
+  // Scanamo for better Scala-DynamoDB integration
+  "org.scanamo" %% "scanamo" % "1.0.0-M23"
 )
 
 ThisBuild / scalafmtOnCompile := true
