@@ -76,39 +76,63 @@ class DynamoDBService @Inject() (config: Configuration) {
     dynamoDbClient.createTable(request)
   }
 
-  def storeFlights(flights: List[Flight], date: LocalDate): Try[Unit] = Try {
-    flights.foreach { flight =>
-      val routeDate = s"${flight.departureCode}#${flight.arrivalCode}#${date.format(DateTimeFormatter.ISO_LOCAL_DATE)}"
+  def storeFlights(flights: List[Flight], date: LocalDate, from: Airport, to: Airport): Try[Unit] = Try {
+    val routeDate = generateRouteDate(from, to, date)
 
-      val item = Map(
-        "routeDate"     -> AttributeValue.builder().s(routeDate).build(),
-        "flightNumber"  -> AttributeValue.builder().s(flight.flightNumber).build(),
-        "airline"       -> AttributeValue.builder().s(flight.airline).build(),
-        "departureCode" -> AttributeValue.builder().s(flight.departureCode).build(),
-        "arrivalCode"   -> AttributeValue.builder().s(flight.arrivalCode).build(),
-        "departureTime" -> AttributeValue
+    if (flights.isEmpty) {
+      // Store a marker for no flights found
+      val noFlightsMarker = Map(
+        "routeDate"       -> AttributeValue.builder().s(routeDate).build(),
+        "flightNumber"    -> AttributeValue.builder().s("NO_FLIGHTS_FOUND").build(),
+        "searchTimestamp" -> AttributeValue
           .builder()
-          .s(flight.departureTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-          .build(),
-        "arrivalTime"   -> AttributeValue
-          .builder()
-          .s(flight.arrivalTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-          .build(),
-        "price"         -> AttributeValue.builder().n(flight.price.toString).build()
+          .s(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+          .build()
       ).asJava
 
       val request = PutItemRequest
         .builder()
         .tableName(flightsTableName)
-        .item(item)
+        .item(noFlightsMarker)
         .build()
 
       dynamoDbClient.putItem(request)
+    } else {
+      flights.foreach { flight =>
+        val item = Map(
+          "routeDate"       -> AttributeValue.builder().s(routeDate).build(),
+          "flightNumber"    -> AttributeValue.builder().s(flight.flightNumber).build(),
+          "airline"         -> AttributeValue.builder().s(flight.airline).build(),
+          "departureCode"   -> AttributeValue.builder().s(flight.departureCode).build(),
+          "arrivalCode"     -> AttributeValue.builder().s(flight.arrivalCode).build(),
+          "departureTime"   -> AttributeValue
+            .builder()
+            .s(flight.departureTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+            .build(),
+          "arrivalTime"     -> AttributeValue
+            .builder()
+            .s(flight.arrivalTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+            .build(),
+          "price"           -> AttributeValue.builder().n(flight.price.toString).build(),
+          "searchTimestamp" -> AttributeValue
+            .builder()
+            .s(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+            .build()
+        ).asJava
+
+        val request = PutItemRequest
+          .builder()
+          .tableName(flightsTableName)
+          .item(item)
+          .build()
+
+        dynamoDbClient.putItem(request)
+      }
     }
   }
 
-  def getFlights(from: Airport, to: Airport, date: LocalDate): Try[List[Flight]] = Try {
-    val routeDate = s"${from.skyId}#${to.skyId}#${date.format(DateTimeFormatter.ISO_LOCAL_DATE)}"
+  def getFlights(from: Airport, to: Airport, date: LocalDate): Try[Option[List[Flight]]] = Try {
+    val routeDate = generateRouteDate(from, to, date)
 
     val request = QueryRequest
       .builder()
@@ -120,19 +144,30 @@ class DynamoDBService @Inject() (config: Configuration) {
       .build()
 
     val response = dynamoDbClient.query(request)
+    val items    = response.items().asScala.toList
 
-    response.items().asScala.toList.map { item =>
-      val map = item.asScala
-      Flight(
-        flightNumber = map("flightNumber").s(),
-        airline = map("airline").s(),
-        departureCode = map("departureCode").s(),
-        arrivalCode = map("arrivalCode").s(),
-        departureTime = LocalDateTime.parse(map("departureTime").s(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-        arrivalTime = LocalDateTime.parse(map("arrivalTime").s(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
-        price = map("price").n().toDouble
-      )
+    if (items.isEmpty) {
+      None // No data found in database
+    } else if (items.exists(_.get("flightNumber").s() == "NO_FLIGHTS_FOUND")) {
+      Some(List.empty) // We previously searched and found no flights
+    } else {
+      Some(items.map { item =>
+        val map = item.asScala
+        Flight(
+          flightNumber = map("flightNumber").s(),
+          airline = map("airline").s(),
+          departureCode = map("departureCode").s(),
+          arrivalCode = map("arrivalCode").s(),
+          departureTime = LocalDateTime.parse(map("departureTime").s(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+          arrivalTime = LocalDateTime.parse(map("arrivalTime").s(), DateTimeFormatter.ISO_LOCAL_DATE_TIME),
+          price = map("price").n().toDouble
+        )
+      })
     }
+  }
+
+  private def generateRouteDate(from: Airport, to: Airport, date: LocalDate): String = {
+    s"${from.skyId}#${to.skyId}#${date.format(DateTimeFormatter.ISO_LOCAL_DATE)}"
   }
 
   def tableExists(): Try[Boolean] = Try {

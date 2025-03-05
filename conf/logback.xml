@@ -43,5 +43,6 @@
 
   <logger name="services.TripCreator" level="INFO"/>
   <logger name="services.HttpApiService" level="INFO"/>
+  <logger name="services.FlightService" level="INFO"/>
 
 </configuration>
