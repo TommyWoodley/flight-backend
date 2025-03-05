@@ -2,13 +2,15 @@ package services
 
 import model.{Airport, Flight, Trip}
 import play.api.Logger
+import javax.inject.{Inject, Singleton}
 
 import java.time.LocalDate
 import java.util.concurrent.Executors
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
 
-class TripCreator(flightService: FlightService, airportService: AirportService) {
+@Singleton
+class TripCreator @Inject() (flightService: FlightService, airportService: AirportService) {
   private val logger: Logger                              = Logger(this.getClass)
   private implicit val executor: ExecutionContextExecutor =
     ExecutionContext.fromExecutor(Executors.newFixedThreadPool(20))

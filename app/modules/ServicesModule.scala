@@ -15,5 +15,7 @@ class ServicesModule extends AbstractModule {
     bind(classOf[AirportService]).in(classOf[Singleton])
     bind(classOf[DateService]).in(classOf[Singleton])
     bind(classOf[FlightService]).in(classOf[Singleton])
+    bind(classOf[WeekendService]).in(classOf[Singleton])
+    bind(classOf[TripCreator]).in(classOf[Singleton])
   }
 }

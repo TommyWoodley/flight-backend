@@ -3,7 +3,7 @@ package controllers
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.{AirportService, DateService, FlightService, TripCreator}
+import services.{AirportService, DateService, FlightService, TripCreator, WeekendService}
 import model.{Flight, Trip}
 import play.api.Logger
 
@@ -17,12 +17,12 @@ class ApiController @Inject() (
     airportService: AirportService,
     dateService: DateService,
     flightService: FlightService,
+    weekendService: WeekendService,
+    tripCreator: TripCreator,
     implicit val config: Configuration
 ) extends BaseController {
 
   private val logger = Logger(this.getClass)
-
-  protected val tripCreator = new TripCreator(flightService, airportService)
 
   def getTrips: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val fromCodeOpt        = request.getQueryString("fromCode")
@@ -71,32 +71,8 @@ class ApiController @Inject() (
           val year              = yearStrOpt.get.toInt
           val numberOfExtraDays = numberOfExtraDaysStrOpt.get.toInt
 
-          if (month < 1 || month > 12) {
-            BadRequest("Month must be between 1 and 12")
-          } else if (numberOfExtraDays > 2) {
-            BadRequest("Additional days cannot be more than 2")
-          } else {
-            val tripDates = dateService.getWeekendTrips(month, year, numberOfExtraDays)
-
-            // Find trips for each possible date combination and get the best ones
-            val allTrips = tripDates.flatMap { tripDate =>
-              tripCreator.create(
-                fromCodes,
-                tripDate.startDate,
-                numberOfExtraDays + 1
-              ) // +1 because numberOfExtraDays is additional to the weekend
-            }
-
-            // Group by destination and get the cheapest trip for each
-            val bestTrips = allTrips
-              .groupBy(_.destination)
-              .values
-              .flatMap(_.minByOption(_.totalPrice))
-              .toList
-              .sortBy(_.totalPrice)
-
-            Ok(Json.toJson(bestTrips))
-          }
+          val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
+          Ok(Json.toJson(bestTrips))
         } catch {
           case _: NumberFormatException =>
             BadRequest("Invalid number format for month, year, or numberOfExtraDays parameters.")
