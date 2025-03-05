@@ -1,6 +1,7 @@
 package model
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.{Json, Writes, Reads, JsPath}
+import play.api.libs.functional.syntax._
 
 import java.time.Duration
 
@@ -26,4 +27,10 @@ object Trip {
       "pricePerHour"      -> Json.toJson(trip.pricePerHour)
     )
   }
+
+  implicit val tripReads: Reads[Trip] = (
+    (JsPath \ "destination").read[String] and
+      (JsPath \ "outbound").read[Flight] and
+      (JsPath \ "inbound").read[Flight]
+  )(Trip.apply _)
 }

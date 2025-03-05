@@ -4,6 +4,8 @@ import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.{AirportService, DateService, FlightService, TripCreator}
+import model.{Flight, Trip}
+import play.api.Logger
 
 import java.time.{LocalDate, Year, YearMonth}
 import java.time.format.{DateTimeFormatter, DateTimeParseException}
@@ -17,6 +19,8 @@ class ApiController @Inject() (
     flightService: FlightService,
     implicit val config: Configuration
 ) extends BaseController {
+
+  private val logger = Logger(this.getClass)
 
   protected val tripCreator = new TripCreator(flightService, airportService)
 
@@ -103,5 +107,28 @@ class ApiController @Inject() (
         BadRequest("Must provide month, year, and numberOfExtraDays parameters")
       }
     }
+  }
+
+  def findTripOptions: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
+    request.body.asJson
+      .map { json =>
+        try {
+          val trip = json.as[Trip]
+          logger.info(s"Received trip: $trip")
+          logger.info(s"Destination: ${trip.destination}")
+          logger.info(s"Outbound flight: ${trip.outbound}")
+          logger.info(s"Inbound flight: ${trip.inbound}")
+          logger.info(s"Time at destination: ${trip.timeAtDestination} hours")
+          logger.info(s"Total price: £${trip.totalPrice}")
+          logger.info(s"Price per hour: £${trip.pricePerHour}")
+          Ok(Json.obj("message" -> "Trip logged successfully"))
+        } catch {
+          case e: Exception =>
+            BadRequest(Json.obj("error" -> s"Invalid trip data: ${e.getMessage}"))
+        }
+      }
+      .getOrElse {
+        BadRequest(Json.obj("error" -> "Expecting JSON data"))
+      }
   }
 }

@@ -4,8 +4,9 @@
 # ~~~~
 
 # Trip API Endpoints
-GET        /api/trips        controllers.ApiController.getTrips
-GET        /api/weekends     controllers.ApiController.getWeekends
+GET        /api/trips           controllers.ApiController.getTrips
+GET        /api/weekends        controllers.ApiController.getWeekends
+POST       /api/trips/options   controllers.ApiController.findTripOptions
 
 # Airport routes
 GET     /api/airports     controllers.AirportController.getAllAirports()
