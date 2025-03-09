@@ -102,6 +102,7 @@ class ApiController @Inject() (
             )
             daysBetween.toInt - 1 // -1 because we don't count the departure day
           }
+          val arrivalCode = trip.inbound.arrivalCode
 
           // Log all the information
           logger.info(s"Received trip: $trip")
@@ -118,7 +119,8 @@ class ApiController @Inject() (
                 "fromCode"          -> fromCode,
                 "month"             -> departureMonth,
                 "year"              -> departureYear,
-                "numberOfExtraDays" -> numberOfExtraDays
+                "numberOfExtraDays" -> numberOfExtraDays,
+                "arrivalCode"       -> arrivalCode
               )
             )
           )
