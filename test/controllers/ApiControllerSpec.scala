@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import services.{TripCreator, FlightService, AirportService, DateService}
+import services.{TripCreator, FlightService, AirportService, DateService, WeekendService}
 
 import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.duration._
@@ -81,12 +81,23 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
 
   "ApiController GET /api/trips" should {
     "return trips for valid request parameters" in {
-      val mockTripCreator = mock[TripCreator]
+      val mockTripCreator    = mock[TripCreator]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+
       when(mockTripCreator.create(List("LHR"), testDate, 2)).thenReturn(List(parisTrip))
 
-      val controller = new ApiController(stubControllerComponents(), config) {
-        override val tripCreator = mockTripCreator
-      }
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/trips?fromCode=LHR&date=2025-01-18&numberOfDays=2")
       val result  = controller.getTrips()(request)
@@ -100,12 +111,23 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "handle multiple departure airports" in {
-      val mockTripCreator = mock[TripCreator]
+      val mockTripCreator    = mock[TripCreator]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+
       when(mockTripCreator.create(List("LHR", "LGW"), testDate, 2)).thenReturn(List(parisTrip))
 
-      val controller = new ApiController(stubControllerComponents(), config) {
-        override val tripCreator = mockTripCreator
-      }
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/trips?fromCode=LHR,LGW&date=2025-01-18&numberOfDays=2")
       val result  = controller.getTrips()(request)
@@ -115,7 +137,21 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return BadRequest for missing parameters" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request1 = FakeRequest(GET, "/api/trips?fromCode=LHR&date=2025-01-18")
       val result1  = controller.getTrips()(request1)
@@ -134,7 +170,21 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return BadRequest for invalid date format" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/trips?fromCode=LHR&date=18-01-2025&numberOfDays=2")
       val result  = controller.getTrips()(request)
@@ -144,12 +194,23 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "handle empty airport codes gracefully" in {
-      val mockTripCreator = mock[TripCreator]
+      val mockTripCreator    = mock[TripCreator]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+
       when(mockTripCreator.create(List.empty[String], testDate, 2)).thenReturn(List.empty)
 
-      val controller = new ApiController(stubControllerComponents(), config) {
-        override val tripCreator = mockTripCreator
-      }
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/trips?fromCode=&date=2025-01-18&numberOfDays=2")
       val result  = controller.getTrips()(request)
@@ -159,7 +220,21 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "handle invalid number of days gracefully" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/trips?fromCode=LHR&date=2025-01-18&numberOfDays=invalid")
       val result  = controller.getTrips()(request)
@@ -171,29 +246,25 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
 
   "ApiController GET /api/weekends" should {
     "return trips for valid request parameters" in {
-      val mockTripCreator = mock[TripCreator]
-      val mockDateService = mock[DateService]
+      val mockTripCreator    = mock[TripCreator]
+      val mockDateService    = mock[DateService]
+      val mockAirportService = mock[AirportService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
 
-      // Create a real DateService to get access to TripDates
-      val realDateService = new DateService
-      val dates           = realDateService.getWeekendTrips(6, 2024, 1)
+      // Mock the weekend service to return trips
+      when(mockWeekendService.getWeekendTrips(List("LHR"), 6, 2024, 1))
+        .thenReturn(List(parisTrip, madridTrip))
 
-      // Mock the date service to return the same dates
-      val mockDates = dates.map { date =>
-        mockDateService.TripDates(date.startDate, date.endDate)
-      }
-      when(mockDateService.getWeekendTrips(eqTo(6), eqTo(2024), eqTo(1))).thenReturn(mockDates)
-
-      // Mock the trip creator for each date
-      dates.foreach { date =>
-        when(mockTripCreator.create(List("LHR"), date.startDate, 2))
-          .thenReturn(List(parisTrip, madridTrip))
-      }
-
-      val controller = new ApiController(stubControllerComponents(), config) {
-        override val tripCreator = mockTripCreator
-        override val dateService = mockDateService
-      }
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=2024&numberOfExtraDays=1")
       val result  = controller.getWeekends()(request)
@@ -207,7 +278,25 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return BadRequest for invalid month" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      // Mock the weekend service to throw an exception for invalid month
+      when(mockWeekendService.getWeekendTrips(List("LHR"), 13, 2024, 1))
+        .thenThrow(new IllegalArgumentException("Month must be between 1 and 12"))
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=13&year=2024&numberOfExtraDays=1")
       val result  = controller.getWeekends()(request)
@@ -217,7 +306,25 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return BadRequest for invalid numberOfExtraDays" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      // Mock the weekend service to throw an exception for invalid numberOfExtraDays
+      when(mockWeekendService.getWeekendTrips(List("LHR"), 6, 2024, 3))
+        .thenThrow(new IllegalArgumentException("Additional days cannot be more than 2"))
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=2024&numberOfExtraDays=3")
       val result  = controller.getWeekends()(request)
@@ -227,29 +334,25 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "handle multiple departure airports" in {
-      val mockTripCreator = mock[TripCreator]
-      val mockDateService = mock[DateService]
+      val mockTripCreator    = mock[TripCreator]
+      val mockDateService    = mock[DateService]
+      val mockAirportService = mock[AirportService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
 
-      // Create a real DateService to get access to TripDates
-      val realDateService = new DateService
-      val dates           = realDateService.getWeekendTrips(6, 2024, 1)
+      // Mock the weekend service to return trips for multiple airports
+      when(mockWeekendService.getWeekendTrips(List("LHR", "LGW"), 6, 2024, 1))
+        .thenReturn(List(parisTrip, madridTrip))
 
-      // Mock the date service to return the same dates
-      val mockDates = dates.map { date =>
-        mockDateService.TripDates(date.startDate, date.endDate)
-      }
-      when(mockDateService.getWeekendTrips(eqTo(6), eqTo(2024), eqTo(1))).thenReturn(mockDates)
-
-      // Mock the trip creator for each date
-      dates.foreach { date =>
-        when(mockTripCreator.create(List("LHR", "LGW"), date.startDate, 2))
-          .thenReturn(List(parisTrip, madridTrip))
-      }
-
-      val controller = new ApiController(stubControllerComponents(), config) {
-        override val tripCreator = mockTripCreator
-        override val dateService = mockDateService
-      }
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/weekends?fromCode=LHR,LGW&month=6&year=2024&numberOfExtraDays=1")
       val result  = controller.getWeekends()(request)
@@ -263,15 +366,25 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return empty list when no weekend trips are found" in {
-      val mockTripCreator = mock[TripCreator]
-      val mockDateService = mock[DateService]
+      val mockTripCreator    = mock[TripCreator]
+      val mockDateService    = mock[DateService]
+      val mockAirportService = mock[AirportService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
 
-      when(mockDateService.getWeekendTrips(eqTo(6), eqTo(2024), eqTo(1))).thenReturn(List.empty)
+      // Mock the weekend service to return an empty list
+      when(mockWeekendService.getWeekendTrips(List("LHR"), 6, 2024, 1))
+        .thenReturn(List.empty)
 
-      val controller = new ApiController(stubControllerComponents(), config) {
-        override val tripCreator = mockTripCreator
-        override val dateService = mockDateService
-      }
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=2024&numberOfExtraDays=1")
       val result  = controller.getWeekends()(request)
@@ -282,7 +395,21 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return BadRequest for invalid year format" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=invalid&numberOfExtraDays=1")
       val result  = controller.getWeekends()(request)
@@ -292,17 +419,232 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return BadRequest for missing parameters" in {
-      val controller = new ApiController(stubControllerComponents(), config)
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
 
       val request1 = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=2024")
       val result1  = controller.getWeekends()(request1)
       status(result1) mustBe BAD_REQUEST
       contentAsString(result1) must include("Must provide month, year, and numberOfExtraDays parameters")
 
-      val request2 = FakeRequest(GET, "/api/weekends?month=6&year=2024&numberOfExtraDays=1")
+      val request2 = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&numberOfExtraDays=1")
       val result2  = controller.getWeekends()(request2)
       status(result2) mustBe BAD_REQUEST
-      contentAsString(result2) must include("Missing required query parameter: fromCode")
+      contentAsString(result2) must include("Must provide month, year, and numberOfExtraDays parameters")
+
+      val request3 = FakeRequest(GET, "/api/weekends?month=6&year=2024&numberOfExtraDays=1")
+      val result3  = controller.getWeekends()(request3)
+      status(result3) mustBe BAD_REQUEST
+      contentAsString(result3) must include("Missing required query parameter: fromCode")
+    }
+
+    "handle invalid number format gracefully" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=invalid&year=2024&numberOfExtraDays=1")
+      val result  = controller.getWeekends()(request)
+
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) must include("Invalid number format")
+    }
+  }
+
+  "ApiController POST /api/tripOptions" should {
+    "accept and process valid trip data" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val tripJson = Json.obj(
+        "destination" -> "France",
+        "outbound"    -> Json.obj(
+          "flightNumber"  -> "FL123",
+          "airline"       -> "British Airways",
+          "departureCode" -> "LHR",
+          "arrivalCode"   -> "CDG",
+          "departureTime" -> "2025-01-18T10:00:00",
+          "arrivalTime"   -> "2025-01-18T12:00:00",
+          "price"         -> 100.0
+        ),
+        "inbound"     -> Json.obj(
+          "flightNumber"  -> "FL124",
+          "airline"       -> "Air France",
+          "departureCode" -> "CDG",
+          "arrivalCode"   -> "LHR",
+          "departureTime" -> "2025-01-20T14:00:00",
+          "arrivalTime"   -> "2025-01-20T16:00:00",
+          "price"         -> 120.0
+        )
+      )
+
+      val request = FakeRequest(POST, "/api/tripOptions")
+        .withJsonBody(tripJson)
+        .withHeaders(CONTENT_TYPE -> "application/json")
+
+      val result  = controller.findTripOptions()(request)
+
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+
+      val jsonResponse = contentAsJson(result)
+      (jsonResponse \ "extractedInfo" \ "fromCode").as[String] mustBe "LHR"
+      (jsonResponse \ "extractedInfo" \ "month").as[Int] mustBe 1
+      (jsonResponse \ "extractedInfo" \ "year").as[Int] mustBe 2025
+      (jsonResponse \ "extractedInfo" \ "numberOfExtraDays").as[Int] mustBe 1
+      (jsonResponse \ "extractedInfo" \ "arrivalCode").as[String] mustBe "LHR"
+    }
+
+    "return BadRequest for invalid JSON" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val request = FakeRequest(POST, "/api/tripOptions")
+        .withTextBody("This is not JSON")
+        .withHeaders(CONTENT_TYPE -> "application/json")
+
+      val result  = controller.findTripOptions()(request)
+
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      contentAsString(result) must include("Expecting JSON data")
+    }
+
+    "return BadRequest for invalid trip data" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val invalidTripJson = Json.obj(
+        "destination" -> "France",
+        "outbound"    -> Json.obj(
+          "flightNumber"  -> "FL123",
+          "airline"       -> "British Airways",
+          "departureCode" -> "LHR",
+          "arrivalCode"   -> "CDG",
+          // Missing departureTime
+          "arrivalTime"   -> "2025-01-18T12:00:00",
+          "price"         -> 100.0
+        ),
+        "inbound"     -> Json.obj(
+          "flightNumber"  -> "FL124",
+          "airline"       -> "Air France",
+          "departureCode" -> "CDG",
+          "arrivalCode"   -> "LHR",
+          "departureTime" -> "2025-01-20T14:00:00",
+          "arrivalTime"   -> "2025-01-20T16:00:00",
+          "price"         -> 120.0
+        )
+      )
+
+      val request = FakeRequest(POST, "/api/tripOptions")
+        .withJsonBody(invalidTripJson)
+        .withHeaders(CONTENT_TYPE -> "application/json")
+
+      val result  = controller.findTripOptions()(request)
+
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      contentAsString(result) must include("Invalid trip data")
+    }
+  }
+
+  "ApiController" should {
+    "have the correct routes" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      ) {
+        override def getTrips        = Action { Ok("trips") }
+        override def getWeekends     = Action { Ok("weekends") }
+        override def findTripOptions = Action { Ok("tripOptions") }
+      }
+
+      val home = controller.getTrips().apply(FakeRequest(GET, "/"))
+      status(home) mustBe OK
+      contentAsString(home) mustBe "trips"
+
+      val weekends = controller.getWeekends().apply(FakeRequest(GET, "/"))
+      status(weekends) mustBe OK
+      contentAsString(weekends) mustBe "weekends"
+
+      val tripOptions = controller.findTripOptions().apply(FakeRequest(GET, "/"))
+      status(tripOptions) mustBe OK
+      contentAsString(tripOptions) mustBe "tripOptions"
     }
   }
 }

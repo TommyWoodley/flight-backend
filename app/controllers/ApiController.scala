@@ -71,8 +71,15 @@ class ApiController @Inject() (
           val year              = yearStrOpt.get.toInt
           val numberOfExtraDays = numberOfExtraDaysStrOpt.get.toInt
 
-          val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
-          Ok(Json.toJson(bestTrips))
+          try {
+            val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
+            Ok(Json.toJson(bestTrips))
+          } catch {
+            case e: IllegalArgumentException =>
+              BadRequest(e.getMessage)
+            case e: Exception                =>
+              BadRequest(e.getMessage)
+          }
         } catch {
           case _: NumberFormatException =>
             BadRequest("Invalid number format for month, year, or numberOfExtraDays parameters.")
@@ -102,7 +109,7 @@ class ApiController @Inject() (
             )
             daysBetween.toInt - 1 // -1 because we don't count the departure day
           }
-          val arrivalCode = trip.inbound.arrivalCode
+          val arrivalCode    = trip.inbound.arrivalCode
 
           // Log all the information
           logger.info(s"Received trip: $trip")
