@@ -90,14 +90,38 @@ class ApiController @Inject() (
       .map { json =>
         try {
           val trip = json.as[Trip]
+
+          // Extract the required information
+          val fromCode       = trip.outbound.departureCode
+          val departureMonth = trip.outbound.departureTime.getMonthValue
+          val departureYear  = trip.outbound.departureTime.getYear
+          val numberOfExtraDays = {
+            val daysBetween = java.time.temporal.ChronoUnit.DAYS.between(
+              trip.outbound.departureTime.toLocalDate,
+              trip.inbound.arrivalTime.toLocalDate
+            )
+            daysBetween.toInt - 1 // -1 because we don't count the departure day
+          }
+
+          // Log all the information
           logger.info(s"Received trip: $trip")
-          logger.info(s"Destination: ${trip.destination}")
-          logger.info(s"Outbound flight: ${trip.outbound}")
-          logger.info(s"Inbound flight: ${trip.inbound}")
-          logger.info(s"Time at destination: ${trip.timeAtDestination} hours")
-          logger.info(s"Total price: £${trip.totalPrice}")
-          logger.info(s"Price per hour: £${trip.pricePerHour}")
-          Ok(Json.obj("message" -> "Trip logged successfully"))
+          logger.info(s"Extracted information:")
+          logger.info(s"  From airport code: $fromCode")
+          logger.info(s"  Month: $departureMonth")
+          logger.info(s"  Year: $departureYear")
+          logger.info(s"  Number of extra days: $numberOfExtraDays")
+
+          Ok(
+            Json.obj(
+              "message"       -> "Trip logged successfully",
+              "extractedInfo" -> Json.obj(
+                "fromCode"          -> fromCode,
+                "month"             -> departureMonth,
+                "year"              -> departureYear,
+                "numberOfExtraDays" -> numberOfExtraDays
+              )
+            )
+          )
         } catch {
           case e: Exception =>
             BadRequest(Json.obj("error" -> s"Invalid trip data: ${e.getMessage}"))

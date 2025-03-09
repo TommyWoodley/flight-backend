@@ -34,7 +34,7 @@ class WeekendService @Inject() (
     allTrips
       .groupBy(_.destination)
       .values
-      .flatMap(_.minByOption(_.totalPrice))
+      .flatMap(_.minByOption(_.pricePerHour))
       .toList
       .sortBy(_.totalPrice)
   }
