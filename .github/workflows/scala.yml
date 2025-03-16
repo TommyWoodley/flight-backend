@@ -1,0 +1,42 @@
+name: Scala CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'sbt'
+    
+    - name: Check formatting
+      run: sbt scalafmtCheckAll
+    
+    - name: Compile
+      run: sbt compile
+    
+    - name: Run tests
+      run: sbt test
+      
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3
+      if: always()
+      with:
+        report_paths: '**/target/test-reports/*.xml'
+        fail_on_failure: true
+        require_tests: true
+        check_name: Test Results 
