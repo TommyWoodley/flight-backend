@@ -7,6 +7,7 @@
 GET        /api/trips           controllers.ApiController.getTrips
 GET        /api/weekends        controllers.ApiController.getWeekends
 POST       /api/trips/options   controllers.ApiController.findTripOptions
+GET        /api/trips/alternatives controllers.ApiController.getAlternativeTrips
 
 # Airport routes
 GET     /api/airports     controllers.AirportController.getAllAirports()
