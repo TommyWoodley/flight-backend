@@ -1,0 +1,50 @@
+name: Scala CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'sbt'
+    
+    - name: Install SBT
+      run: |
+        echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
+        echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
+        curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+        sudo apt-get update
+        sudo apt-get install -y sbt
+    
+    - name: Check formatting
+      run: sbt scalafmtCheckAll
+    
+    - name: Compile
+      run: sbt compile
+    
+    - name: Run tests
+      run: sbt test
+      
+    - name: Publish Test Report
+      uses: mikepenz/action-junit-report@v3
+      if: always()
+      with:
+        report_paths: '**/target/test-reports/*.xml'
+        fail_on_failure: true
+        require_tests: true
+        check_name: Test Results 
