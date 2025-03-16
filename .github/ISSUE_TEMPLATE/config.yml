@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Flight Backend Questions
+    url: https://github.com/thwoodley/flight-backend/discussions
+    about: Please ask and answer questions here.
+  - name: Flight Backend Documentation
+    url: https://github.com/thwoodley/flight-backend#readme
+    about: Check the README for documentation on how to use the Flight Backend. 
