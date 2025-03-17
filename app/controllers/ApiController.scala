@@ -68,55 +68,6 @@ class ApiController @Inject() (
     }
   }
 
-  def findTripOptions: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    request.body.asJson
-      .map { json =>
-        try {
-          val trip = json.as[Trip]
-
-          // Extract the required information
-          val fromCode       = trip.outbound.departureCode
-          val departureMonth = trip.outbound.departureTime.getMonthValue
-          val departureYear  = trip.outbound.departureTime.getYear
-          val numberOfExtraDays = {
-            val daysBetween = java.time.temporal.ChronoUnit.DAYS.between(
-              trip.outbound.departureTime.toLocalDate,
-              trip.inbound.arrivalTime.toLocalDate
-            )
-            daysBetween.toInt - 1 // -1 because we don't count the departure day
-          }
-          val arrivalCode    = trip.inbound.arrivalCode
-
-          // Log all the information
-          logger.info(s"Received trip: $trip")
-          logger.info(s"Extracted information:")
-          logger.info(s"  From airport code: $fromCode")
-          logger.info(s"  Month: $departureMonth")
-          logger.info(s"  Year: $departureYear")
-          logger.info(s"  Number of extra days: $numberOfExtraDays")
-
-          Ok(
-            Json.obj(
-              "message"       -> "Trip logged successfully",
-              "extractedInfo" -> Json.obj(
-                "fromCode"          -> fromCode,
-                "month"             -> departureMonth,
-                "year"              -> departureYear,
-                "numberOfExtraDays" -> numberOfExtraDays,
-                "arrivalCode"       -> arrivalCode
-              )
-            )
-          )
-        } catch {
-          case e: Exception =>
-            BadRequest(Json.obj("error" -> s"Invalid trip data: ${e.getMessage}"))
-        }
-      }
-      .getOrElse {
-        BadRequest(Json.obj("error" -> "Expecting JSON data"))
-      }
-  }
-
   def getAlternativeTrips: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val originOpt       = request.getQueryString("origin")
     val destinationOpt  = request.getQueryString("destination")
