@@ -11,6 +11,8 @@ import validators.RequestValidator
 import java.time.{LocalDate, Year, YearMonth}
 import java.time.format.{DateTimeFormatter, DateTimeParseException}
 import javax.inject._
+import scala.util.Success
+import scala.util.Failure
 
 @Singleton
 class ApiController @Inject() (
@@ -31,28 +33,18 @@ class ApiController @Inject() (
     val dateStrOpt         = request.getQueryString("date")
     val numberOfDaysStrOpt = request.getQueryString("numberOfDays")
 
-    if (fromCodeOpt.isEmpty) {
-      BadRequest("Missing required query parameter: fromCode")
-    } else {
-      val fromCodes = if (fromCodeOpt.get.isEmpty) List.empty else fromCodeOpt.get.split(",").toList
+    val validationResult = RequestValidator.validateTripRequest(fromCodeOpt, dateStrOpt, numberOfDaysStrOpt)
 
-      if (dateStrOpt.isDefined && numberOfDaysStrOpt.isDefined) {
+    validationResult match {
+      case Failure(exception)                       =>
+        BadRequest(exception.getMessage)
+      case Success((fromCodes, date, numberOfDays)) =>
         try {
-          val date         = LocalDate.parse(dateStrOpt.get, DateTimeFormatter.ISO_LOCAL_DATE)
-          val numberOfDays = numberOfDaysStrOpt.get.toInt
-          val trips        = tripCreator.create(fromCodes, date, numberOfDays)
+          val trips = tripCreator.create(fromCodes, date, numberOfDays)
           Ok(Json.toJson(trips))
         } catch {
-          case _: DateTimeParseException =>
-            BadRequest("Invalid date format. Please use ISO_LOCAL_DATE format (yyyy-MM-dd).")
-          case _: NumberFormatException  =>
-            BadRequest("Invalid number format for numberOfDays parameter.")
-          case e: Exception              =>
-            BadRequest(e.getMessage)
+          case e: Exception => BadRequest(e.getMessage)
         }
-      } else {
-        BadRequest("Must provide both date and numberOfDays parameters")
-      }
     }
   }
 
