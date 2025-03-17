@@ -67,37 +67,4 @@ class ApiController @Inject() (
         }
     }
   }
-
-  def getAlternativeTrips: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    val originOpt       = request.getQueryString("origin")
-    val destinationOpt  = request.getQueryString("destination")
-    val extraDaysOpt    = request.getQueryString("extra_days")
-    val departureDayOpt = request.getQueryString("departure_day")
-
-    RequestValidator.validateAlternativeTripsRequest(
-      originOpt,
-      destinationOpt,
-      extraDaysOpt,
-      departureDayOpt
-    ) match {
-      case Failure(exception)                                      =>
-        BadRequest(exception.getMessage)
-      case Success((origin, destination, extraDays, departureDay)) =>
-        try {
-          val alternativeTrips = alternativeTripService.getAlternativeTrips(
-            origin,
-            destination,
-            extraDays,
-            departureDay
-          )
-          Ok(Json.toJson(alternativeTrips))
-        } catch {
-          case e: IllegalArgumentException =>
-            BadRequest(e.getMessage)
-          case e: Exception                =>
-            logger.error("Error getting alternative trips", e)
-            InternalServerError(s"Error getting alternative trips: ${e.getMessage}")
-        }
-    }
-  }
 }
