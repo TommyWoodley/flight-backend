@@ -33,9 +33,7 @@ class ApiController @Inject() (
     val dateStrOpt         = request.getQueryString("date")
     val numberOfDaysStrOpt = request.getQueryString("numberOfDays")
 
-    val validationResult = RequestValidator.validateTripRequest(fromCodeOpt, dateStrOpt, numberOfDaysStrOpt)
-
-    validationResult match {
+    RequestValidator.validateTripRequest(fromCodeOpt, dateStrOpt, numberOfDaysStrOpt) match {
       case Failure(exception)                       =>
         BadRequest(exception.getMessage)
       case Success((fromCodes, date, numberOfDays)) =>
@@ -54,35 +52,19 @@ class ApiController @Inject() (
     val yearStrOpt              = request.getQueryString("year")
     val numberOfExtraDaysStrOpt = request.getQueryString("numberOfExtraDays")
 
-    if (fromCodeOpt.isEmpty) {
-      BadRequest("Missing required query parameter: fromCode")
-    } else {
-      val fromCodes = if (fromCodeOpt.get.isEmpty) List.empty else fromCodeOpt.get.split(",").toList
-
-      if (monthStrOpt.isDefined && yearStrOpt.isDefined && numberOfExtraDaysStrOpt.isDefined) {
+    RequestValidator.validateWeekendRequest(fromCodeOpt, monthStrOpt, yearStrOpt, numberOfExtraDaysStrOpt) match {
+      case Failure(exception)                                   =>
+        BadRequest(exception.getMessage)
+      case Success((fromCodes, month, year, numberOfExtraDays)) =>
         try {
-          val month             = monthStrOpt.get.toInt
-          val year              = yearStrOpt.get.toInt
-          val numberOfExtraDays = numberOfExtraDaysStrOpt.get.toInt
-
-          try {
-            val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
-            Ok(Json.toJson(bestTrips))
-          } catch {
-            case e: IllegalArgumentException =>
-              BadRequest(e.getMessage)
-            case e: Exception                =>
-              BadRequest(e.getMessage)
-          }
+          val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
+          Ok(Json.toJson(bestTrips))
         } catch {
-          case _: NumberFormatException =>
-            BadRequest("Invalid number format for month, year, or numberOfExtraDays parameters.")
-          case e: Exception             =>
+          case e: IllegalArgumentException =>
+            BadRequest(e.getMessage)
+          case e: Exception                =>
             BadRequest(e.getMessage)
         }
-      } else {
-        BadRequest("Must provide month, year, and numberOfExtraDays parameters")
-      }
     }
   }
 

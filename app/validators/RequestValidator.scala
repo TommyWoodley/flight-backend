@@ -52,6 +52,54 @@ object RequestValidator extends Results {
     }
   }
 
+  /** Validates weekend request parameters
+    *
+    * @param fromCodeOpt
+    *   Option containing the fromCode parameter
+    * @param monthStrOpt
+    *   Option containing the month parameter
+    * @param yearStrOpt
+    *   Option containing the year parameter
+    * @param numberOfExtraDaysStrOpt
+    *   Option containing the numberOfExtraDays parameter
+    * @return
+    *   Try with either a validation Result (for failure) or a tuple with validated parameters (for success)
+    */
+  def validateWeekendRequest(
+      fromCodeOpt: Option[String],
+      monthStrOpt: Option[String],
+      yearStrOpt: Option[String],
+      numberOfExtraDaysStrOpt: Option[String]
+  ): Try[(List[String], Int, Int, Int)] = {
+    // Validate fromCode is present
+    if (fromCodeOpt.isEmpty) {
+      Failure(new IllegalArgumentException("Missing required query parameter: fromCode"))
+    } else {
+      val fromCodes = parseCodes(fromCodeOpt.get)
+
+      // Validate all required parameters are present
+      if (monthStrOpt.isEmpty || yearStrOpt.isEmpty || numberOfExtraDaysStrOpt.isEmpty) {
+        Failure(new IllegalArgumentException("Must provide month, year, and numberOfExtraDays parameters"))
+      } else {
+        // Validate month format
+        val monthTry = parseMonth(monthStrOpt.get)
+
+        // Validate year format
+        val yearTry = parseYear(yearStrOpt.get)
+
+        // Validate numberOfExtraDays format
+        val numberOfExtraDaysTry = parseNumberOfExtraDays(numberOfExtraDaysStrOpt.get)
+
+        // Combine the results
+        for {
+          month             <- monthTry
+          year              <- yearTry
+          numberOfExtraDays <- numberOfExtraDaysTry
+        } yield (fromCodes, month, year, numberOfExtraDays)
+      }
+    }
+  }
+
   /** Parses a comma-separated list of codes into a List
     *
     * @param codesStr
@@ -76,6 +124,40 @@ object RequestValidator extends Results {
     }
   }
 
+  /** Parses a month string to an integer
+    *
+    * @param monthStr
+    *   String representation of a month (1-12)
+    * @return
+    *   Try with either an Int or an exception
+    */
+  private def parseMonth(monthStr: String): Try[Int] = {
+    Try(monthStr.toInt)
+      .flatMap { month =>
+        if (month >= 1 && month <= 12) {
+          Success(month)
+        } else {
+          Failure(new IllegalArgumentException("Month must be between 1 and 12."))
+        }
+      }
+      .recoverWith { case _: NumberFormatException =>
+        Failure(new IllegalArgumentException("Invalid number format for month, year, or numberOfExtraDays parameters"))
+      }
+  }
+
+  /** Parses a year string to an integer
+    *
+    * @param yearStr
+    *   String representation of a year
+    * @return
+    *   Try with either an Int or an exception
+    */
+  private def parseYear(yearStr: String): Try[Int] = {
+    Try(yearStr.toInt).recoverWith { case _: NumberFormatException =>
+      Failure(new IllegalArgumentException("Invalid number format for month, year, or numberOfExtraDays parameters"))
+    }
+  }
+
   /** Parses a string to an integer
     *
     * @param numberStr
@@ -86,6 +168,19 @@ object RequestValidator extends Results {
   private def parseNumberOfDays(numberStr: String): Try[Int] = {
     Try(numberStr.toInt).recoverWith { case _: NumberFormatException =>
       Failure(new IllegalArgumentException("Invalid number format for numberOfDays parameter."))
+    }
+  }
+
+  /** Parses a string to an integer for the numberOfExtraDays parameter in weekends request
+    *
+    * @param numberStr
+    *   String representation of a number
+    * @return
+    *   Try with either an Int or an exception
+    */
+  private def parseNumberOfExtraDays(numberStr: String): Try[Int] = {
+    Try(numberStr.toInt).recoverWith { case _: NumberFormatException =>
+      Failure(new IllegalArgumentException("Invalid number format for month, year, or numberOfExtraDays parameters"))
     }
   }
 }
