@@ -21,8 +21,6 @@ class AlternativeTripService @Inject() (
     *   IATA code of departure airport
     * @param destination
     *   IATA code of destination airport
-    * @param monthStr
-    *   Target month in YYYY-MM format
     * @param extraDays
     *   0 for weekend, 1 for long-weekend
     * @param departureDayStr
@@ -33,20 +31,20 @@ class AlternativeTripService @Inject() (
   def getAlternativeTrips(
       origin: String,
       destination: String,
-      monthStr: String,
       extraDays: Int,
       departureDayStr: String
   ): AlternativeTrips = {
-    logger.info(s"Getting alternative trips for $origin to $destination in $monthStr with $extraDays extra days")
-
-    // Parse the month and departure day
-    val yearMonth    = YearMonth.parse(monthStr, DateTimeFormatter.ofPattern("yyyy-MM"))
+    // Parse the departure day
     val departureDay = LocalDate.parse(departureDayStr, DateTimeFormatter.ISO_LOCAL_DATE)
 
-    // Validate that the departure day is in the specified month
-    if (departureDay.getYear != yearMonth.getYear || departureDay.getMonthValue != yearMonth.getMonthValue) {
-      throw new IllegalArgumentException("Departure day must be in the specified month")
-    }
+    // Extract month and year from the departure day
+    val month = departureDay.getMonthValue
+    val year  = departureDay.getYear
+
+    logger.info(s"Getting alternative trips for $origin to $destination in $month/$year with $extraDays extra days")
+
+    // Create the YearMonth from the departure day
+    val yearMonth = YearMonth.of(year, month)
 
     // Get the selected trip
     val selectedTrip = getSelectedTrip(origin, destination, departureDay, extraDays)

@@ -45,10 +45,12 @@ class AlternativeTripsControllerSpec
   )
 
   private val origin       = "LHR"
-  private val destination  = "BCN"
+  private val destination  = "CDG"
   private val month        = "2025-06"
+  private val year         = 2025
+  private val monthValue   = 6
   private val extraDays    = 0
-  private val departureDay = "2025-06-07"
+  private val departureDay = "2025-06-14"
 
   private val selectedTrip     = createTrip("LHR", "BCN", "2025-06-07", "2025-06-08", 100.0)
   private val alternativeTrip1 = createTrip("LHR", "BCN", "2025-06-14", "2025-06-15", 120.0)
@@ -64,7 +66,6 @@ class AlternativeTripsControllerSpec
       mockAlternativeTripService.getAlternativeTrips(
         eqTo(origin),
         eqTo(destination),
-        eqTo(month),
         eqTo(extraDays),
         eqTo(departureDay)
       )
@@ -74,7 +75,7 @@ class AlternativeTripsControllerSpec
   "ApiController.getAlternativeTrips" should "return 200 OK with alternative trips" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=$extraDays&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=$extraDays&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -85,7 +86,7 @@ class AlternativeTripsControllerSpec
   it should "return 400 Bad Request when origin is missing" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?destination=$destination&month=$month&extra_days=$extraDays&departure_day=$departureDay"
+      s"/api/trips/alternatives?destination=$destination&extra_days=$extraDays&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -96,7 +97,7 @@ class AlternativeTripsControllerSpec
   it should "return 400 Bad Request when destination is missing" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&month=$month&extra_days=$extraDays&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&extra_days=$extraDays&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -104,21 +105,10 @@ class AlternativeTripsControllerSpec
     contentAsString(result) should include("Missing required query parameter: destination")
   }
 
-  it should "return 400 Bad Request when month is missing" in {
-    val request = FakeRequest(
-      GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=$extraDays&departure_day=$departureDay"
-    )
-    val result  = controller.getAlternativeTrips()(request)
-
-    status(result) shouldBe BAD_REQUEST
-    contentAsString(result) should include("Missing required query parameter: month")
-  }
-
   it should "return 400 Bad Request when extra_days is missing" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -129,7 +119,7 @@ class AlternativeTripsControllerSpec
   it should "return 400 Bad Request when departure_day is missing" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=$extraDays"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=$extraDays"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -140,7 +130,7 @@ class AlternativeTripsControllerSpec
   it should "return 400 Bad Request when extra_days is invalid" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=invalid&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=invalid&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -151,7 +141,7 @@ class AlternativeTripsControllerSpec
   it should "return 400 Bad Request when extra_days is out of range" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=2&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=2&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -159,21 +149,10 @@ class AlternativeTripsControllerSpec
     contentAsString(result) should include("extra_days must be 0 (for weekend) or 1 (for long-weekend)")
   }
 
-  it should "return 400 Bad Request when month format is invalid" in {
-    val request = FakeRequest(
-      GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=invalid&extra_days=$extraDays&departure_day=$departureDay"
-    )
-    val result  = controller.getAlternativeTrips()(request)
-
-    status(result) shouldBe BAD_REQUEST
-    contentAsString(result) should include("Invalid month format")
-  }
-
   it should "return 400 Bad Request when departure_day format is invalid" in {
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=$extraDays&departure_day=invalid"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=$extraDays&departure_day=invalid"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -186,7 +165,6 @@ class AlternativeTripsControllerSpec
       mockAlternativeTripService.getAlternativeTrips(
         eqTo(origin),
         eqTo(destination),
-        eqTo(month),
         eqTo(extraDays),
         eqTo(departureDay)
       )
@@ -194,7 +172,7 @@ class AlternativeTripsControllerSpec
 
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=$extraDays&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=$extraDays&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 
@@ -207,7 +185,6 @@ class AlternativeTripsControllerSpec
       mockAlternativeTripService.getAlternativeTrips(
         eqTo(origin),
         eqTo(destination),
-        eqTo(month),
         eqTo(extraDays),
         eqTo(departureDay)
       )
@@ -215,7 +192,7 @@ class AlternativeTripsControllerSpec
 
     val request = FakeRequest(
       GET,
-      s"/api/trips/alternatives?origin=$origin&destination=$destination&month=$month&extra_days=$extraDays&departure_day=$departureDay"
+      s"/api/trips/alternatives?origin=$origin&destination=$destination&extra_days=$extraDays&departure_day=$departureDay"
     )
     val result  = controller.getAlternativeTrips()(request)
 

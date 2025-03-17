@@ -45,6 +45,8 @@ class AlternativeTripServiceSpec extends AnyFlatSpec with Matchers with MockitoS
   private val origin          = "LHR"
   private val destination     = "BCN"
   private val monthStr        = "2025-06"
+  private val year            = 2025
+  private val month           = 6
   private val extraDays       = 0
   private val departureDayStr = "2025-06-07"
 
@@ -63,7 +65,7 @@ class AlternativeTripServiceSpec extends AnyFlatSpec with Matchers with MockitoS
   }
 
   "AlternativeTripService" should "return the selected trip and alternative weekends" in {
-    val result = service.getAlternativeTrips(origin, destination, monthStr, extraDays, departureDayStr)
+    val result = service.getAlternativeTrips(origin, destination, extraDays, departureDayStr)
 
     result.selected_trip shouldBe selectedTrip
     result.alternative_weekends should contain theSameElementsAs List(
@@ -73,21 +75,13 @@ class AlternativeTripServiceSpec extends AnyFlatSpec with Matchers with MockitoS
     )
   }
 
-  it should "throw an exception if the departure day is not in the specified month" in {
-    val invalidDepartureDay = "2025-07-07"
-
-    an[IllegalArgumentException] should be thrownBy {
-      service.getAlternativeTrips(origin, destination, monthStr, extraDays, invalidDepartureDay)
-    }
-  }
-
   it should "throw an exception if no trips are found for the selected departure day" in {
     // Setup mock to return empty list for the selected departure day
     when(mockTripCreator.create(List(origin), departureDay, extraDays + 1))
       .thenReturn(List.empty)
 
     an[IllegalArgumentException] should be thrownBy {
-      service.getAlternativeTrips(origin, destination, monthStr, extraDays, departureDayStr)
+      service.getAlternativeTrips(origin, destination, extraDays, departureDayStr)
     }
   }
 

@@ -71,25 +71,22 @@ class ApiController @Inject() (
   def getAlternativeTrips: Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
     val originOpt       = request.getQueryString("origin")
     val destinationOpt  = request.getQueryString("destination")
-    val monthOpt        = request.getQueryString("month")
     val extraDaysOpt    = request.getQueryString("extra_days")
     val departureDayOpt = request.getQueryString("departure_day")
 
     RequestValidator.validateAlternativeTripsRequest(
       originOpt,
       destinationOpt,
-      monthOpt,
       extraDaysOpt,
       departureDayOpt
     ) match {
-      case Failure(exception)                                             =>
+      case Failure(exception)                                      =>
         BadRequest(exception.getMessage)
-      case Success((origin, destination, month, extraDays, departureDay)) =>
+      case Success((origin, destination, extraDays, departureDay)) =>
         try {
           val alternativeTrips = alternativeTripService.getAlternativeTrips(
             origin,
             destination,
-            month,
             extraDays,
             departureDay
           )

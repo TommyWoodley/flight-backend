@@ -190,8 +190,6 @@ object RequestValidator extends Results {
     *   Option containing the origin parameter
     * @param destinationOpt
     *   Option containing the destination parameter
-    * @param monthStrOpt
-    *   Option containing the month parameter
     * @param extraDaysStrOpt
     *   Option containing the extra_days parameter
     * @param departureDayStrOpt
@@ -202,17 +200,14 @@ object RequestValidator extends Results {
   def validateAlternativeTripsRequest(
       originOpt: Option[String],
       destinationOpt: Option[String],
-      monthStrOpt: Option[String],
       extraDaysStrOpt: Option[String],
       departureDayStrOpt: Option[String]
-  ): Try[(String, String, String, Int, String)] = {
+  ): Try[(String, String, Int, String)] = {
     // Check if all required parameters are present
     if (originOpt.isEmpty) {
       Failure(new IllegalArgumentException("Missing required query parameter: origin"))
     } else if (destinationOpt.isEmpty) {
       Failure(new IllegalArgumentException("Missing required query parameter: destination"))
-    } else if (monthStrOpt.isEmpty) {
-      Failure(new IllegalArgumentException("Missing required query parameter: month"))
     } else if (extraDaysStrOpt.isEmpty) {
       Failure(new IllegalArgumentException("Missing required query parameter: extra_days"))
     } else if (departureDayStrOpt.isEmpty) {
@@ -221,18 +216,14 @@ object RequestValidator extends Results {
       // Validate extra_days format and range
       val extraDaysTry = parseExtraDays(extraDaysStrOpt.get)
 
-      // Validate month format (YYYY-MM)
-      val monthTry = parseYearMonth(monthStrOpt.get)
-
       // Validate departure_day format (YYYY-MM-DD)
       val departureDayTry = parseDepartureDay(departureDayStrOpt.get)
 
       // Combine the results
       for {
         extraDays    <- extraDaysTry
-        month        <- monthTry
         departureDay <- departureDayTry
-      } yield (originOpt.get, destinationOpt.get, month, extraDays, departureDay)
+      } yield (originOpt.get, destinationOpt.get, extraDays, departureDay)
     }
   }
 
@@ -253,29 +244,8 @@ object RequestValidator extends Results {
         }
       }
       .recoverWith { case _: NumberFormatException =>
-        Failure(new IllegalArgumentException("Invalid number format for extra_days parameter."))
+        Failure(new IllegalArgumentException("Invalid number format for extra_days parameter"))
       }
-  }
-
-  /** Validates the format of a month string (YYYY-MM)
-    *
-    * @param monthStr
-    *   String month in YYYY-MM format
-    * @return
-    *   Try with either the validated month string or an exception
-    */
-  private def parseYearMonth(monthStr: String): Try[String] = {
-    if (monthStr.matches("\\d{4}-\\d{2}")) {
-      Try {
-        // Further validate by parsing it to ensure it's a valid year-month
-        YearMonth.parse(monthStr, DateTimeFormatter.ofPattern("yyyy-MM"))
-        monthStr
-      }.recoverWith { case _: DateTimeParseException =>
-        Failure(new IllegalArgumentException("Invalid month format. Please use YYYY-MM format."))
-      }
-    } else {
-      Failure(new IllegalArgumentException("Invalid month format. Please use YYYY-MM format."))
-    }
   }
 
   /** Validates the format of a departure day string (YYYY-MM-DD)
