@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import services.{TripCreator, FlightService, AirportService, DateService, WeekendService, AlternativeTripService}
+import services.{TripCreator, FlightService, AirportService, DateService, WeekendService}
 
 import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.duration._
@@ -80,12 +80,11 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
   private val madridTrip = Trip("Spain", outboundFlightMadrid, inboundFlightMadrid)
 
   // Mocks
-  private val mockAirportService         = mock[AirportService]
-  private val mockDateService            = mock[DateService]
-  private val mockFlightService          = mock[FlightService]
-  private val mockWeekendService         = mock[WeekendService]
-  private val mockTripCreator            = mock[TripCreator]
-  private val mockAlternativeTripService = mock[AlternativeTripService]
+  private val mockAirportService = mock[AirportService]
+  private val mockDateService    = mock[DateService]
+  private val mockFlightService  = mock[FlightService]
+  private val mockWeekendService = mock[WeekendService]
+  private val mockTripCreator    = mock[TripCreator]
 
   "ApiController GET /api/trips" should {
     "return trips for a given origin and date" in {
@@ -101,7 +100,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -132,7 +130,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -157,7 +154,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -191,7 +187,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -218,7 +213,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -243,7 +237,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -274,7 +267,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -307,7 +299,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -336,7 +327,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -365,7 +355,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -398,7 +387,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -424,7 +412,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -449,7 +436,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -483,7 +469,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -495,13 +480,12 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return 400 Bad Request when fromCode is missing" in {
-      val mockAirportService         = mock[AirportService]
-      val mockDateService            = mock[DateService]
-      val mockFlightService          = mock[FlightService]
-      val mockWeekendService         = mock[WeekendService]
-      val mockTripCreator            = mock[TripCreator]
-      val mockAlternativeTripService = mock[AlternativeTripService]
-      val config                     = Configuration.from(Map("api.key" -> "test-key"))
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+      val config             = Configuration.from(Map("api.key" -> "test-key"))
 
       val controller = new ApiController(
         stubControllerComponents(),
@@ -510,7 +494,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -522,12 +505,11 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return 400 Bad Request when month, year, or numberOfExtraDays parameters are missing" in {
-      val mockAirportService         = mock[AirportService]
-      val mockDateService            = mock[DateService]
-      val mockFlightService          = mock[FlightService]
-      val mockWeekendService         = mock[WeekendService]
-      val mockTripCreator            = mock[TripCreator]
-      val mockAlternativeTripService = mock[AlternativeTripService]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
 
       val controller = new ApiController(
         stubControllerComponents(),
@@ -536,7 +518,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -548,12 +529,11 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return 400 Bad Request when month, year, or numberOfExtraDays parameters are invalid" in {
-      val mockAirportService         = mock[AirportService]
-      val mockDateService            = mock[DateService]
-      val mockFlightService          = mock[FlightService]
-      val mockWeekendService         = mock[WeekendService]
-      val mockTripCreator            = mock[TripCreator]
-      val mockAlternativeTripService = mock[AlternativeTripService]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
 
       val controller = new ApiController(
         stubControllerComponents(),
@@ -562,7 +542,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -574,13 +553,12 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
     }
 
     "return 400 Bad Request when the WeekendService throws an Exception" in {
-      val mockAirportService         = mock[AirportService]
-      val mockDateService            = mock[DateService]
-      val mockFlightService          = mock[FlightService]
-      val mockWeekendService         = mock[WeekendService]
-      val mockTripCreator            = mock[TripCreator]
-      val mockAlternativeTripService = mock[AlternativeTripService]
-      val config                     = Configuration.from(Map("api.key" -> "test-key"))
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+      val config             = Configuration.from(Map("api.key" -> "test-key"))
 
       when(mockWeekendService.getWeekendTrips(any[List[String]], any[Int], any[Int], any[Int]))
         .thenThrow(new RuntimeException("Invalid number format for month, year, or numberOfExtraDays parameters"))
@@ -592,7 +570,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
 
@@ -606,12 +583,11 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
 
   "ApiController" should {
     "have the correct routes" in {
-      val mockAirportService         = mock[AirportService]
-      val mockDateService            = mock[DateService]
-      val mockFlightService          = mock[FlightService]
-      val mockWeekendService         = mock[WeekendService]
-      val mockTripCreator            = mock[TripCreator]
-      val mockAlternativeTripService = mock[AlternativeTripService]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
 
       val controller = new ApiController(
         stubControllerComponents(),
@@ -620,7 +596,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
     }
@@ -633,7 +608,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
         mockFlightService,
         mockWeekendService,
         mockTripCreator,
-        mockAlternativeTripService,
         config
       )
     }

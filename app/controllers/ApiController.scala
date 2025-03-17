@@ -3,7 +3,7 @@ package controllers
 import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc._
-import services.{AirportService, DateService, FlightService, TripCreator, WeekendService, AlternativeTripService}
+import services.{AirportService, DateService, FlightService, TripCreator, WeekendService}
 import model.{Flight, Trip}
 import play.api.Logger
 import validators.RequestValidator
@@ -22,7 +22,6 @@ class ApiController @Inject() (
     flightService: FlightService,
     weekendService: WeekendService,
     tripCreator: TripCreator,
-    alternativeTripService: AlternativeTripService,
     implicit val config: Configuration
 ) extends BaseController {
 
