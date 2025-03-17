@@ -6,6 +6,7 @@ import play.api.mvc._
 import services.{AirportService, DateService, FlightService, TripCreator, WeekendService, AlternativeTripService}
 import model.{Flight, Trip}
 import play.api.Logger
+import validators.RequestValidator
 
 import java.time.{LocalDate, Year, YearMonth}
 import java.time.format.{DateTimeFormatter, DateTimeParseException}
