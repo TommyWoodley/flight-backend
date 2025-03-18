@@ -132,17 +132,13 @@ object RequestValidator extends Results {
     *   Try with either an Int or an exception
     */
   private def parseMonth(monthStr: String): Try[Int] = {
-    Try(monthStr.toInt)
-      .flatMap { month =>
-        if (month >= 1 && month <= 12) {
-          Success(month)
-        } else {
-          Failure(new IllegalArgumentException("Month must be between 1 and 12."))
-        }
-      }
-      .recoverWith { case _: NumberFormatException =>
-        Failure(new IllegalArgumentException("Invalid number format for month, year, or numberOfExtraDays parameters"))
-      }
+    parseStringToInt(monthStr, "month") match {
+      case Success(month) if month >= 1 && month <= 12 =>
+        Success(month)
+      case Success(_) =>
+        Failure(new IllegalArgumentException("Month must be between 1 and 12."))
+      case Failure(e) => Failure(e)
+    }
   }
 
   /** Parses a year string to an integer
