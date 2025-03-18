@@ -414,7 +414,7 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
       val result  = controller.getWeekends()(request)
 
       status(result) mustBe BAD_REQUEST
-      contentAsString(result) must include("Invalid number format for month, year, or numberOfExtraDays parameters")
+      contentAsString(result) must include("Invalid number format for year parameter")
     }
 
     "return BadRequest for missing parameters" in {
