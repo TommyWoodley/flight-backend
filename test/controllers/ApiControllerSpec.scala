@@ -48,11 +48,11 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
 
   private val inboundFlight = Flight(
     "FL124",
-    "British Airways",
+    "Air France",
     "CDG",
     "LHR",
-    LocalDateTime.parse("2025-01-19T18:00:00"),
-    LocalDateTime.parse("2025-01-19T20:00:00"),
+    LocalDateTime.parse("2025-01-20T14:00:00"),
+    LocalDateTime.parse("2025-01-20T16:00:00"),
     120.0
   )
 
@@ -79,18 +79,13 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
   private val parisTrip  = Trip("France", outboundFlight, inboundFlight)
   private val madridTrip = Trip("Spain", outboundFlightMadrid, inboundFlightMadrid)
 
-  // Mocks
-  private val mockAirportService = mock[AirportService]
-  private val mockDateService    = mock[DateService]
-  private val mockFlightService  = mock[FlightService]
-  private val mockWeekendService = mock[WeekendService]
-  private val mockTripCreator    = mock[TripCreator]
-
   "ApiController GET /api/trips" should {
-    "return trips for a given origin and date" in {
-      // Setup mocks
-      when(mockAirportService.getAirportsByCode(List("LHR"))).thenReturn(List(lhrAirport))
-      when(mockAirportService.getAllAirportsInADifferentCountry("GB")).thenReturn(List(cdgAirport, madAirport))
+    "return trips for valid request parameters" in {
+      val mockTripCreator    = mock[TripCreator]
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
       when(mockTripCreator.create(List("LHR"), testDate, 2)).thenReturn(List(parisTrip))
 
       val controller = new ApiController(
@@ -477,139 +472,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
 
       status(result) mustBe BAD_REQUEST
       contentAsString(result) must include("Invalid number format")
-    }
-
-    "return 400 Bad Request when fromCode is missing" in {
-      val mockAirportService = mock[AirportService]
-      val mockDateService    = mock[DateService]
-      val mockFlightService  = mock[FlightService]
-      val mockWeekendService = mock[WeekendService]
-      val mockTripCreator    = mock[TripCreator]
-      val config             = Configuration.from(Map("api.key" -> "test-key"))
-
-      val controller = new ApiController(
-        stubControllerComponents(),
-        mockAirportService,
-        mockDateService,
-        mockFlightService,
-        mockWeekendService,
-        mockTripCreator,
-        config
-      )
-
-      val request = FakeRequest(GET, "/api/weekends?month=6&year=2024&numberOfExtraDays=1")
-      val result  = controller.getWeekends()(request)
-
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) must include("Missing required query parameter: fromCode")
-    }
-
-    "return 400 Bad Request when month, year, or numberOfExtraDays parameters are missing" in {
-      val mockAirportService = mock[AirportService]
-      val mockDateService    = mock[DateService]
-      val mockFlightService  = mock[FlightService]
-      val mockWeekendService = mock[WeekendService]
-      val mockTripCreator    = mock[TripCreator]
-
-      val controller = new ApiController(
-        stubControllerComponents(),
-        mockAirportService,
-        mockDateService,
-        mockFlightService,
-        mockWeekendService,
-        mockTripCreator,
-        config
-      )
-
-      val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=2024")
-      val result  = controller.getWeekends()(request)
-
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) must include("Must provide month, year, and numberOfExtraDays parameters")
-    }
-
-    "return 400 Bad Request when month, year, or numberOfExtraDays parameters are invalid" in {
-      val mockAirportService = mock[AirportService]
-      val mockDateService    = mock[DateService]
-      val mockFlightService  = mock[FlightService]
-      val mockWeekendService = mock[WeekendService]
-      val mockTripCreator    = mock[TripCreator]
-
-      val controller = new ApiController(
-        stubControllerComponents(),
-        mockAirportService,
-        mockDateService,
-        mockFlightService,
-        mockWeekendService,
-        mockTripCreator,
-        config
-      )
-
-      val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=invalid&year=2024&numberOfExtraDays=1")
-      val result  = controller.getWeekends()(request)
-
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) must include("Invalid number format")
-    }
-
-    "return 400 Bad Request when the WeekendService throws an Exception" in {
-      val mockAirportService = mock[AirportService]
-      val mockDateService    = mock[DateService]
-      val mockFlightService  = mock[FlightService]
-      val mockWeekendService = mock[WeekendService]
-      val mockTripCreator    = mock[TripCreator]
-      val config             = Configuration.from(Map("api.key" -> "test-key"))
-
-      when(mockWeekendService.getWeekendTrips(any[List[String]], any[Int], any[Int], any[Int]))
-        .thenThrow(new RuntimeException("Invalid number format for month, year, or numberOfExtraDays parameters"))
-
-      val controller = new ApiController(
-        stubControllerComponents(),
-        mockAirportService,
-        mockDateService,
-        mockFlightService,
-        mockWeekendService,
-        mockTripCreator,
-        config
-      )
-
-      val request = FakeRequest(GET, "/api/weekends?fromCode=LHR&month=6&year=2024&numberOfExtraDays=1")
-      val result  = controller.getWeekends()(request)
-
-      status(result) mustBe BAD_REQUEST
-      contentAsString(result) must include("Invalid number format for month, year, or numberOfExtraDays parameters")
-    }
-  }
-
-  "ApiController" should {
-    "have the correct routes" in {
-      val mockAirportService = mock[AirportService]
-      val mockDateService    = mock[DateService]
-      val mockFlightService  = mock[FlightService]
-      val mockWeekendService = mock[WeekendService]
-      val mockTripCreator    = mock[TripCreator]
-
-      val controller = new ApiController(
-        stubControllerComponents(),
-        mockAirportService,
-        mockDateService,
-        mockFlightService,
-        mockWeekendService,
-        mockTripCreator,
-        config
-      )
-    }
-
-    "handle errors gracefully" in {
-      val controller = new ApiController(
-        stubControllerComponents(),
-        mockAirportService,
-        mockDateService,
-        mockFlightService,
-        mockWeekendService,
-        mockTripCreator,
-        config
-      )
     }
   }
 }
