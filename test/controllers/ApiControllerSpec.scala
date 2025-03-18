@@ -474,4 +474,176 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
       contentAsString(result) must include("Invalid number format")
     }
   }
+
+  "ApiController POST /api/tripOptions" should {
+    "accept and process valid trip data" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val tripJson = Json.obj(
+        "destination" -> "France",
+        "outbound"    -> Json.obj(
+          "flightNumber"  -> "FL123",
+          "airline"       -> "British Airways",
+          "departureCode" -> "LHR",
+          "arrivalCode"   -> "CDG",
+          "departureTime" -> "2025-01-18T10:00:00",
+          "arrivalTime"   -> "2025-01-18T12:00:00",
+          "price"         -> 100.0
+        ),
+        "inbound"     -> Json.obj(
+          "flightNumber"  -> "FL124",
+          "airline"       -> "Air France",
+          "departureCode" -> "CDG",
+          "arrivalCode"   -> "LHR",
+          "departureTime" -> "2025-01-20T14:00:00",
+          "arrivalTime"   -> "2025-01-20T16:00:00",
+          "price"         -> 120.0
+        )
+      )
+
+      val request = FakeRequest(POST, "/api/tripOptions")
+        .withJsonBody(tripJson)
+        .withHeaders(CONTENT_TYPE -> "application/json")
+
+      val result  = controller.findTripOptions()(request)
+
+      status(result) mustBe OK
+      contentType(result) mustBe Some("application/json")
+
+      val jsonResponse = contentAsJson(result)
+      (jsonResponse \ "extractedInfo" \ "fromCode").as[String] mustBe "LHR"
+      (jsonResponse \ "extractedInfo" \ "month").as[Int] mustBe 1
+      (jsonResponse \ "extractedInfo" \ "year").as[Int] mustBe 2025
+      (jsonResponse \ "extractedInfo" \ "numberOfExtraDays").as[Int] mustBe 1
+      (jsonResponse \ "extractedInfo" \ "arrivalCode").as[String] mustBe "LHR"
+    }
+
+    "return BadRequest for invalid JSON" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val request = FakeRequest(POST, "/api/tripOptions")
+        .withTextBody("This is not JSON")
+        .withHeaders(CONTENT_TYPE -> "application/json")
+
+      val result  = controller.findTripOptions()(request)
+
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      contentAsString(result) must include("Expecting JSON data")
+    }
+
+    "return BadRequest for invalid trip data" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      )
+
+      val invalidTripJson = Json.obj(
+        "destination" -> "France",
+        "outbound"    -> Json.obj(
+          "flightNumber"  -> "FL123",
+          "airline"       -> "British Airways",
+          "departureCode" -> "LHR",
+          "arrivalCode"   -> "CDG",
+          // Missing departureTime
+          "arrivalTime"   -> "2025-01-18T12:00:00",
+          "price"         -> 100.0
+        ),
+        "inbound"     -> Json.obj(
+          "flightNumber"  -> "FL124",
+          "airline"       -> "Air France",
+          "departureCode" -> "CDG",
+          "arrivalCode"   -> "LHR",
+          "departureTime" -> "2025-01-20T14:00:00",
+          "arrivalTime"   -> "2025-01-20T16:00:00",
+          "price"         -> 120.0
+        )
+      )
+
+      val request = FakeRequest(POST, "/api/tripOptions")
+        .withJsonBody(invalidTripJson)
+        .withHeaders(CONTENT_TYPE -> "application/json")
+
+      val result  = controller.findTripOptions()(request)
+
+      status(result) mustBe BAD_REQUEST
+      contentType(result) mustBe Some("application/json")
+      contentAsString(result) must include("Invalid trip data")
+    }
+  }
+
+  "ApiController" should {
+    "have the correct routes" in {
+      val mockAirportService = mock[AirportService]
+      val mockDateService    = mock[DateService]
+      val mockFlightService  = mock[FlightService]
+      val mockWeekendService = mock[WeekendService]
+      val mockTripCreator    = mock[TripCreator]
+
+      val controller = new ApiController(
+        stubControllerComponents(),
+        mockAirportService,
+        mockDateService,
+        mockFlightService,
+        mockWeekendService,
+        mockTripCreator,
+        config
+      ) {
+        override def getTrips        = Action { Ok("trips") }
+        override def getWeekends     = Action { Ok("weekends") }
+        override def findTripOptions = Action { Ok("tripOptions") }
+      }
+
+      val home = controller.getTrips().apply(FakeRequest(GET, "/"))
+      status(home) mustBe OK
+      contentAsString(home) mustBe "trips"
+
+      val weekends = controller.getWeekends().apply(FakeRequest(GET, "/"))
+      status(weekends) mustBe OK
+      contentAsString(weekends) mustBe "weekends"
+
+      val tripOptions = controller.findTripOptions().apply(FakeRequest(GET, "/"))
+      status(tripOptions) mustBe OK
+      contentAsString(tripOptions) mustBe "tripOptions"
+    }
+  }
 }
