@@ -86,7 +86,6 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
       val mockDateService    = mock[DateService]
       val mockFlightService  = mock[FlightService]
       val mockWeekendService = mock[WeekendService]
-
       when(mockTripCreator.create(List("LHR"), testDate, 2)).thenReturn(List(parisTrip))
 
       val controller = new ApiController(
@@ -415,7 +414,7 @@ class ApiControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting 
       val result  = controller.getWeekends()(request)
 
       status(result) mustBe BAD_REQUEST
-      contentAsString(result) must include("Invalid number format for month, year, or numberOfExtraDays parameters")
+      contentAsString(result) must include("Invalid number format for year parameter")
     }
 
     "return BadRequest for missing parameters" in {

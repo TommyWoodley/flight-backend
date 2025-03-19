@@ -6,10 +6,13 @@ import play.api.mvc._
 import services.{AirportService, DateService, FlightService, TripCreator, WeekendService}
 import model.{Flight, Trip}
 import play.api.Logger
+import validators.RequestValidator
 
 import java.time.{LocalDate, Year, YearMonth}
 import java.time.format.{DateTimeFormatter, DateTimeParseException}
 import javax.inject._
+import scala.util.Success
+import scala.util.Failure
 
 @Singleton
 class ApiController @Inject() (
@@ -29,28 +32,16 @@ class ApiController @Inject() (
     val dateStrOpt         = request.getQueryString("date")
     val numberOfDaysStrOpt = request.getQueryString("numberOfDays")
 
-    if (fromCodeOpt.isEmpty) {
-      BadRequest("Missing required query parameter: fromCode")
-    } else {
-      val fromCodes = if (fromCodeOpt.get.isEmpty) List.empty else fromCodeOpt.get.split(",").toList
-
-      if (dateStrOpt.isDefined && numberOfDaysStrOpt.isDefined) {
+    RequestValidator.validateTripRequest(fromCodeOpt, dateStrOpt, numberOfDaysStrOpt) match {
+      case Failure(exception)                       =>
+        BadRequest(exception.getMessage)
+      case Success((fromCodes, date, numberOfDays)) =>
         try {
-          val date         = LocalDate.parse(dateStrOpt.get, DateTimeFormatter.ISO_LOCAL_DATE)
-          val numberOfDays = numberOfDaysStrOpt.get.toInt
-          val trips        = tripCreator.create(fromCodes, date, numberOfDays)
+          val trips = tripCreator.create(fromCodes, date, numberOfDays)
           Ok(Json.toJson(trips))
         } catch {
-          case _: DateTimeParseException =>
-            BadRequest("Invalid date format. Please use ISO_LOCAL_DATE format (yyyy-MM-dd).")
-          case _: NumberFormatException  =>
-            BadRequest("Invalid number format for numberOfDays parameter.")
-          case e: Exception              =>
-            BadRequest(e.getMessage)
+          case e: Exception => BadRequest(e.getMessage)
         }
-      } else {
-        BadRequest("Must provide both date and numberOfDays parameters")
-      }
     }
   }
 
@@ -60,35 +51,19 @@ class ApiController @Inject() (
     val yearStrOpt              = request.getQueryString("year")
     val numberOfExtraDaysStrOpt = request.getQueryString("numberOfExtraDays")
 
-    if (fromCodeOpt.isEmpty) {
-      BadRequest("Missing required query parameter: fromCode")
-    } else {
-      val fromCodes = if (fromCodeOpt.get.isEmpty) List.empty else fromCodeOpt.get.split(",").toList
-
-      if (monthStrOpt.isDefined && yearStrOpt.isDefined && numberOfExtraDaysStrOpt.isDefined) {
+    RequestValidator.validateWeekendRequest(fromCodeOpt, monthStrOpt, yearStrOpt, numberOfExtraDaysStrOpt) match {
+      case Failure(exception)                                   =>
+        BadRequest(exception.getMessage)
+      case Success((fromCodes, month, year, numberOfExtraDays)) =>
         try {
-          val month             = monthStrOpt.get.toInt
-          val year              = yearStrOpt.get.toInt
-          val numberOfExtraDays = numberOfExtraDaysStrOpt.get.toInt
-
-          try {
-            val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
-            Ok(Json.toJson(bestTrips))
-          } catch {
-            case e: IllegalArgumentException =>
-              BadRequest(e.getMessage)
-            case e: Exception                =>
-              BadRequest(e.getMessage)
-          }
+          val bestTrips = weekendService.getWeekendTrips(fromCodes, month, year, numberOfExtraDays)
+          Ok(Json.toJson(bestTrips))
         } catch {
-          case _: NumberFormatException =>
-            BadRequest("Invalid number format for month, year, or numberOfExtraDays parameters.")
-          case e: Exception             =>
+          case e: IllegalArgumentException =>
+            BadRequest(e.getMessage)
+          case e: Exception                =>
             BadRequest(e.getMessage)
         }
-      } else {
-        BadRequest("Must provide month, year, and numberOfExtraDays parameters")
-      }
     }
   }
 
