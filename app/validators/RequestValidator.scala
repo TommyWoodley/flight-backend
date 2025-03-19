@@ -1,9 +1,8 @@
 package validators
 
-import play.api.libs.json.Json
-import play.api.mvc.{Result, Results}
+import play.api.mvc.Results
 
-import java.time.{LocalDate, YearMonth}
+import java.time.LocalDate
 import java.time.format.{DateTimeFormatter, DateTimeParseException}
 import scala.util.{Failure, Success, Try}
 
@@ -135,9 +134,9 @@ object RequestValidator extends Results {
     parseStringToInt(monthStr, "month") match {
       case Success(month) if month >= 1 && month <= 12 =>
         Success(month)
-      case Success(_) =>
+      case Success(_)                                  =>
         Failure(new IllegalArgumentException("Month must be between 1 and 12."))
-      case Failure(e) => Failure(e)
+      case Failure(e)                                  => Failure(e)
     }
   }
 
@@ -148,9 +147,7 @@ object RequestValidator extends Results {
     * @return
     *   Try with either an Int or an exception
     */
-  private def parseYear(yearStr: String): Try[Int] = {
-    return parseStringToInt(yearStr, "year")
-  }
+  private def parseYear(yearStr: String): Try[Int] = parseStringToInt(yearStr, "year")
 
   /** Parses a string to an integer for a given parameter
     *
