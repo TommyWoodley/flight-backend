@@ -3,15 +3,17 @@ package services
 import play.api.Logger
 import play.api.libs.json.{JsValue, Json}
 import scalaj.http.{Http, HttpResponse}
+
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+import utils.SecretsManagerUtil
 
 import scala.util.{Failure, Success, Try}
 
 @Singleton
 class HttpApiService @Inject() (config: Configuration) extends ApiService {
   private val logger: Logger           = Logger(this.getClass)
-  private val flightLabsApiKey: String = sys.env.getOrElse("FLIGHT_LABS_API", "")
+  private val flightLabsApiKey: String = SecretsManagerUtil.getSecret("flight_labs_api")
   private val baseUrl: String          = "https://www.goflightlabs.com"
 
   override def get(endpoint: String, params: Map[String, String]): Option[JsValue] = {

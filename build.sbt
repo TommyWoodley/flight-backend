@@ -24,6 +24,8 @@ libraryDependencies ++= Seq(
   "org.scanamo" %% "scanamo" % "1.0.0-M23"
 )
 
+libraryDependencies += "software.amazon.awssdk" % "secretsmanager" % "2.20.162"
+
 ThisBuild / scalafmtOnCompile := true
 
 // Adds additional packages into Twirl
