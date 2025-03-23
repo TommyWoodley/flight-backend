@@ -47,4 +47,37 @@ jobs:
         report_paths: '**/target/test-reports/*.xml'
         fail_on_failure: true
         require_tests: true
-        check_name: Test Results 
+        check_name: Test Results
+        
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Start Docker Compose
+      run: |
+        docker-compose up -d
+        # Give the services some time to start up
+        sleep 30
+        
+    - name: Check Health Endpoint
+      run: |
+        response=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/health)
+        if [ "$response" = "200" ]; then
+          echo "Health check successful!"
+        else
+          echo "Health check failed with status code: $response"
+          exit 1
+        fi
+        
+    - name: Verify Health Endpoint Response
+      run: |
+        health_response=$(curl -s http://localhost:9000/health)
+        if [[ $health_response == *"healthy"*"true"* ]]; then
+          echo "Health endpoint reports system is healthy!"
+        else
+          echo "Health endpoint response does not indicate system is healthy: $health_response"
+          exit 1
+        fi
+    
+    - name: Stop Docker Compose
+      if: always()
+      run: docker-compose down 
